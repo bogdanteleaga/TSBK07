@@ -1,5 +1,8 @@
 import sys
-import cyglfw3 as glfw
+import pygame
+from pygame.locals import *
+from pygame.constants import *
+#import cyglfw3 as glfw
 from OpenGL.GL import *
 from OpenGL.arrays import vbo
 import shaderutil
@@ -40,8 +43,12 @@ def initWindow():
 
     return window
 
+def initPygame():
+    pygame.display.set_mode((WIDTH, HEIGHT), OPENGL|DOUBLEBUF)
+
 def init():
-    window = initWindow()
+    #window = initWindow()
+    initPygame()
     program = shaderutil.createProgram('shaders/old.vert', 'shaders/old.frag')
     glUseProgram(program)
 
@@ -81,8 +88,9 @@ def init():
     glBindVertexArray(0)
 
 
-    while not glfw.WindowShouldClose(window):
-        glfw.SetCursorPos(window, 300.0, 200.0)
+    #while not glfw.WindowShouldClose(window):
+    while 1:
+        #glfw.SetCursorPos(window, 300.0, 200.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         
         glBindVertexArray(vao)
@@ -92,12 +100,14 @@ def init():
         glDrawArrays(GL_TRIANGLES, 0, 3)
 
         # Swap front and back buffers
-        glfw.SwapBuffers(window)
+        #glfw.SwapBuffers(window)
+        pygame.display.flip()
 
         # Poll for and process events
-        glfw.PollEvents()
+        #glfw.PollEvents()
+        pygame.time.wait(10)
 
-    glfw.Terminate()
+    #glfw.Terminate()
 
 if __name__ == '__main__':
     init()
