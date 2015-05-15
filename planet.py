@@ -88,6 +88,86 @@ class Sun(GameObject):
         rot = mat4.from_y_rotation(self.spin, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
         return trans
+
+class Cube(GameObject):
+
+    def __init__(self, name=None, position=None, texImg=None, specTexImg=None, radius=None,
+                       mass=None, spin=None, shininess=None, ka=None, kd=None,
+                       ks=None, program=None):
+        GameObject.__init__(self, name=name, position=position, texImg=texImg,
+                specTexImg=specTexImg, shininess=shininess, ka=ka, kd=kd,
+                ks=ks, program=program)
+        self.radius = radius
+        self.mass = mass
+        self.spin = spin
+        self._initModel()
+
+    def _initModel(self):
+        vertexPos = [
+        # front
+        -1.0, -1.0,  1.0,
+         1.0, -1.0,  1.0,
+         1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        # back
+        -1.0, -1.0, -1.0,
+         1.0, -1.0, -1.0,
+         1.0,  1.0, -1.0,
+        -1.0,  1.0, -1.0,
+        ]
+        normals = [
+        # front
+        -1.0, -1.0,  1.0,
+         1.0, -1.0,  1.0,
+         1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        # back
+        -1.0, -1.0, -1.0,
+         1.0, -1.0, -1.0,
+         1.0,  1.0, -1.0,
+        -1.0,  1.0, -1.0,
+        ]
+
+        textureCoords = [
+        0.0, 0.0,
+        0.1, 0.1,
+        0.2, 0.2,
+        0.3, 0.3,
+        0.4, 0.4,
+        0.5, 0.5,
+        0.6, 0.6,
+        0.7, 0.7
+        ]
+        indexData = [
+            # front
+            0, 1, 2,
+            2, 3, 0,
+            # top
+            3, 2, 6,
+            6, 7, 3,
+            # back
+            7, 6, 5,
+            5, 4, 7,
+            # bottom
+            4, 5, 1,
+            1, 0, 4,
+            # left
+            4, 0, 3,
+            3, 7, 4,
+            # right
+            1, 5, 6,
+            6, 2, 1,
+        ]
+
+        self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
+        self.indexLen = len(indexData)
+
+    def update(self):
+        return
+
+    def getModelMatrix(self):
+        return mat4.identity(dtype='f')
+
 """
 Maybe do a map for every attribute and the name that it has in the shader. Making it the same would be easier though.
 
