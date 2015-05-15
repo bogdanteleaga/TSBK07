@@ -19,8 +19,8 @@ def createSphereCoords(radius):
             cosPhi = math.cos(phi)
 
             x = cosPhi * sinTheta
-            y = cosTheta
-            z = sinPhi * sinTheta
+            y = sinPhi * sinTheta
+            z = cosTheta
 
             u = 1 - (lon / longBands)
             v = 1 - (lat / latBands)
@@ -49,6 +49,7 @@ def createSphereCoords(radius):
             indexData.append(y)
             indexData.append(y + 1)
             indexData.append(x + 1)
+    print indexData
 
     return vertexPos, normals, textureCoords, indexData
 

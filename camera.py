@@ -7,7 +7,7 @@ import cyglfw3 as glfw
 horizontalAngle = 3.14
 verticalAngle = 0.0
 speed = 0.0166
-mouseSpeed = 0.00005
+mouseSpeed = 0.0005
 
 def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
     global horizontalAngle

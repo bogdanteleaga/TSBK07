@@ -10,7 +10,7 @@ import math
 
 G = 6.67384e-11
 METERS_PER_UNIT = 1000000000
-SEC_PER_STEP = 8
+SEC_PER_STEP = 800
 STEPS_PER_FRAME = 50
 
 class Planet(GameObject):
@@ -58,9 +58,9 @@ class Planet(GameObject):
 
     def getModelMatrix(self):
         # TODO: maybe spin planet around another axis and add scaling
-        rot = mat4.from_y_rotation(self.spin, dtype='f')
+        #rot = mat4.from_y_rotation(self.spin, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
-        return trans * rot
+        return trans
 
 class Sun(GameObject):
 
@@ -78,7 +78,6 @@ class Sun(GameObject):
     def _initModel(self):
         vertexPos, normals, textureCoords, indexData = createSphereCoords(self.radius)
         self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
-        print indexData
         self.indexLen = len(indexData)
 
     def update(self):
@@ -86,7 +85,7 @@ class Sun(GameObject):
 
     def getModelMatrix(self):
         # TODO: re-enable spin once it shows up
-        #rot = mat4.from_y_rotation(self.spin, dtype='f')
+        rot = mat4.from_y_rotation(self.spin, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
         return trans
 """

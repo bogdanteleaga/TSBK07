@@ -38,7 +38,7 @@ class GameObject:
 
     def _sendLightningParameters(self):
         names = ["ka", "kd", "ks", "shininess"]
-        kaLoc, kdLoc, ksLoc, shininessLoc = [glGetAttribLocation(self.program, name) for name in names]
+        kaLoc, kdLoc, ksLoc, shininessLoc = [glGetUniformLocation(self.program, name) for name in names]
         glUniform1f(kaLoc, self.ka)
         glUniform1f(kdLoc, self.kd)
         glUniform1f(ksLoc, self.ks)
@@ -48,7 +48,7 @@ class GameObject:
         glBindVertexArray(self.vao)
 
         # print self.getModelMatrix()
-        glUniformMatrix4fv(glGetAttribLocation(self.program, "mMatrix"), 1, GL_FALSE, self.getModelMatrix())
+        glUniformMatrix4fv(glGetUniformLocation(self.program, "mMatrix"), 1, GL_FALSE, self.getModelMatrix())
 
         self._bindTextures()
         self._sendLightningParameters()

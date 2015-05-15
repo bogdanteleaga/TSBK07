@@ -63,7 +63,7 @@ def initPlanets(program):
     return [sun, earth]
 
 def initCamera():
-    eye = vec3([100,100,100], dtype='f')
+    eye = vec3([5,5,5], dtype='f')
     target = vec3([0,0,0], dtype='f')
     up = vec3([0,1,0], dtype='f')
 
@@ -74,12 +74,13 @@ def initCamera():
 def main():
     window = initWindow()
     program = shaderutil.createProgram('shaders/main.vert', 'shaders/main.frag')
+    glEnable(GL_DEPTH_TEST)
 
     # Initialize objects
     planets = initPlanets(program)
 
-    mvpMatrixPos = glGetAttribLocation(program, "mvpMatrix")
-    projMatrix = mat4.perspective_projection(45, float(WIDTH/HEIGHT), 0.1, 10000.0, dtype='f')
+    mvpMatrixPos = glGetUniformLocation(program, "mvpMatrix")
+    projMatrix = mat4.perspective_projection(60, float(WIDTH/HEIGHT), 0.1, 10000.0, dtype='f')
     eyePos = glGetAttribLocation(program, "eye")
 
     eye, viewMatrix = initCamera()
@@ -92,7 +93,6 @@ def main():
         currentTime = glfw.GetTime()
         dt = currentTime - oldTime
         oldTime = currentTime
-        print dt
 
         eye, viewMatrix = camera.getNewViewMatrixAndEye(window, dt, eye, WIDTH, HEIGHT)
         glUniform3fv(eyePos, 1, GL_FALSE, eye)
@@ -100,8 +100,9 @@ def main():
         for planet in planets:
             planet.update()
 
-            mvpMatrix = projMatrix * viewMatrix * planet.getModelMatrix()
-            glUniform4fv(mvpMatrixPos, 1, GL_FALSE, mvpMatrix)
+            #mvpMatrix = projMatrix * viewMatrix * planet.getModelMatrix()
+            mvpMatrix = planet.getModelMatrix() * viewMatrix * projMatrix
+            glUniformMatrix4fv(mvpMatrixPos, 1, GL_FALSE, mvpMatrix)
 
             planet.draw()
 

@@ -30,9 +30,5 @@ def initializeVAO(program, vertexPos, normals, textureCoords, indexData):
 
 
     glBindVertexArray(0)
-    posVBO.unbind()
-    normalVBO.unbind()
-    texVBO.unbind()
-    indexVBO.unbind()
 
     return vao
