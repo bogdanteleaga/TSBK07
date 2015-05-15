@@ -5,27 +5,30 @@
 
 """
 
+from OpenGL.GL import *
 from pyrr import Matrix44 as mat4
 from pyrr import Vector3 as vec3
+from texture import activateTexture, loadTexture
 
 class GameObject:
 
-    def __init__(self, name=None, position=None, texImg=None, specularTexImg=None, shininess=None, ka=None, kd=None, ks=None):
-        self.model = mat4(dtype='f')
+    def __init__(self, name=None, position=None, texImg=None, specTexImg=None,
+            shininess=None, ka=None, kd=None, ks=None, program=None):
+        self.model = mat4.identity(dtype='f')
         self.name = name
         self.position = position
         self.texImg = texImg
-        self.specularTexImg = specularTexImg
+        self.specTexImg = specTexImg
         self.shininess = shininess
         self.ka = ka
         self.kd = kd
         self.ks = ks
+        self.program = program
         self.initTextures()
-        self.matrixPos = glGetAttribLocation(program, "mMatrix")
 
     def initTextures(self):
         self.texture = loadTexture(self.texImg)
-        self.specTex = loadTexture(self.specularTexImg) if self.specularTexImg else None
+        self.specTex = loadTexture(self.specTexImg) if self.specTexImg else None
 
     def _bindTextures(self):
         # TODO: send some uniform to shader to inform it of textures passed
@@ -34,19 +37,22 @@ class GameObject:
             activateTexture(self.specTex, GL_TEXTURE1)
 
     def _sendLightningParameters(self):
-        # TODO: send lightning parameters to shader such as kd, ka, ks, shininess
-        # It would be easier on the shader if everybody sent a value
-        return
+        names = ["ka", "kd", "ks", "shininess"]
+        kaLoc, kdLoc, ksLoc, shininessLoc = [glGetAttribLocation(self.program, name) for name in names]
+        glUniform1f(kaLoc, self.ka)
+        glUniform1f(kdLoc, self.kd)
+        glUniform1f(ksLoc, self.ks)
+        glUniform1f(shininessLoc, self.shininess)
 
-    def draw(self, program):
-    
+    def draw(self):
         glBindVertexArray(self.vao)
 
-        glUniformMatrix4fv(self.matrixPos, 1, GL_FALSE, self.model)    
+        print self.getModelMatrix()
+        glUniformMatrix4fv(glGetAttribLocation(self.program, "mMatrix"), 1, GL_FALSE, self.getModelMatrix())
 
         self._bindTextures()
         self._sendLightningParameters()
 
-        glDrawElements(GL_TRIANLES, self.indexLen, GL_UNSIGNED_INT, None)
+        glDrawElements(GL_TRIANGLES, self.indexLen, GL_UNSIGNED_INT, None)
 
-
+        glBindVertexArray(0)

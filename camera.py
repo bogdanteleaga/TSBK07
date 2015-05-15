@@ -2,13 +2,14 @@ from OpenGL.GL import *
 from pyrr import Matrix44 as mat4
 from pyrr import Vector3 as vec3
 import math
+import cyglfw3 as glfw
 
 horizontalAngle = 3.14
 verticalAngle = 0.0
-speed = 0.0166f
-mouseSpeed = 0.00005f
+speed = 0.0166
+mouseSpeed = 0.00005
 
-def getViewMatrixAndPosition(window, dt, position, width=1920.0, height=1080.0):
+def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
     global horizontalAngle
     global verticalAngle
 
@@ -16,7 +17,7 @@ def getViewMatrixAndPosition(window, dt, position, width=1920.0, height=1080.0):
     x, y = glfw.GetCursorPos(window)
 
     # Reset mouse position for next frame
-    glfw.GetCursorPos(window, width/2.0, height/2.0);
+    glfw.SetCursorPos(window, width/2.0, height/2.0);
 
     # Compute new orientation
     horizontalAngle += mouseSpeed * float(width/2.0 - x);
@@ -28,35 +29,33 @@ def getViewMatrixAndPosition(window, dt, position, width=1920.0, height=1080.0):
         math.sin(verticalAngle),
         math.cos(verticalAngle) * math.cos(horizontalAngle)
     ], dtype='f')
-    
+
     # Right vector
     right = vec3([
-        math.sin(horizontalAngle - math.pi/2.0), 
+        math.sin(horizontalAngle - math.pi/2.0),
         0.0,
         math.cos(horizontalAngle - math.pi/2.0)
     ], dtype='f')
-    
+
     # Up vector
     up = right ^ direction
 
     # Move forward
     if glfw.GetKey(window, glfw.KEY_UP) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_W) == glfw.PRESS:
-        position += direction * deltaTime * speed;
-    
+        position += direction * dt * speed;
+
     # Move backward
     if glfw.GetKey(window, glfw.KEY_DOWN) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_S) == glfw.PRESS:
-        position -= direction * deltaTime * speed
-    
+        position -= direction * dt * speed
+
     # Strafe right
     if glfw.GetKey(window, glfw.KEY_RIGHT) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_D) == glfw.PRESS:
-        position += right * deltaTime * speed
-    
+        position += right * dt * speed
+
     # Strafe left
     if glfw.GetKey(window, glfw.KEY_LEFT) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_A) == glfw.PRESS:
-        position -= right * deltaTime * speed
-    
+        position -= right * dt * speed
 
-    FoV = initialFoV# - 5 * glfwGetMouseWheel(); # Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
     # Camera matrix
     viewMatrix = lookAt(position, position + direction, up)

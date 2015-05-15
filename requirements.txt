@@ -1,0 +1,8 @@
+Cython==0.22
+Pillow==2.8.1
+PyOpenGL==3.1.0
+cyglfw3==3.1.0.1
+multipledispatch==0.4.7
+numpy==1.9.2
+pyrr==0.6.7
+wsgiref==0.1.2
