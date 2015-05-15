@@ -13,15 +13,18 @@ def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
     global horizontalAngle
     global verticalAngle
 
+    dt = dt * 1000
+
     # Get mouse position
     x, y = glfw.GetCursorPos(window)
+    print x,y
 
     # Reset mouse position for next frame
     glfw.SetCursorPos(window, width/2.0, height/2.0);
 
     # Compute new orientation
-    horizontalAngle += mouseSpeed * float(width/2.0 - x);
-    verticalAngle   += mouseSpeed * float(height/2.0 - y);
+    horizontalAngle += mouseSpeed * dt * float(width/2.0 - x);
+    verticalAngle   += mouseSpeed * dt * float(height/2.0 - y);
 
     # Direction : Spherical coordinates to Cartesian coordinates conversion
     direction = vec3([
@@ -42,7 +45,7 @@ def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
 
     # Move forward
     if glfw.GetKey(window, glfw.KEY_UP) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_W) == glfw.PRESS:
-        position += direction * dt * speed;
+        position += direction * dt * speed
 
     # Move backward
     if glfw.GetKey(window, glfw.KEY_DOWN) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_S) == glfw.PRESS:

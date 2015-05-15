@@ -47,7 +47,7 @@ class GameObject:
     def draw(self):
         glBindVertexArray(self.vao)
 
-        print self.getModelMatrix()
+        # print self.getModelMatrix()
         glUniformMatrix4fv(glGetAttribLocation(self.program, "mMatrix"), 1, GL_FALSE, self.getModelMatrix())
 
         self._bindTextures()

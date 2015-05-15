@@ -74,7 +74,6 @@ def initCamera():
 def main():
     window = initWindow()
     program = shaderutil.createProgram('shaders/main.vert', 'shaders/main.frag')
-    glUseProgram(program)
 
     # Initialize objects
     planets = initPlanets(program)
@@ -88,6 +87,7 @@ def main():
     dt, oldTime = 0.0, 0.0
     while not glfw.WindowShouldClose(window):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glUseProgram(program)
 
         currentTime = glfw.GetTime()
         dt = currentTime - oldTime

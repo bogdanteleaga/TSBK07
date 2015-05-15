@@ -36,7 +36,6 @@ class Planet(GameObject):
         x = self.distance * math.cos(angle)
         y = self.distance * math.sin(angle)
         self.position = vec3([x, y, 0])
-
     def _initModel(self):
         vertexPos, normals, textureCoords, indexData = createSphereCoords(self.radius)
         self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
@@ -79,6 +78,7 @@ class Sun(GameObject):
     def _initModel(self):
         vertexPos, normals, textureCoords, indexData = createSphereCoords(self.radius)
         self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
+        print indexData
         self.indexLen = len(indexData)
 
     def update(self):

@@ -1,16 +1,16 @@
 import sys
-import pygame
-from pygame.locals import *
-from pygame.constants import *
-#import cyglfw3 as glfw
+import cyglfw3 as glfw
 from OpenGL.GL import *
 from OpenGL.arrays import vbo
 import shaderutil
 import numpy as np
+from pyrr import Matrix44 as mat4
+from pyrr import Vector3 as vec3
+import camera
 
 version = 3, 2
-WIDTH = 640
-HEIGHT = 480
+WIDTH = 1920.0
+HEIGHT = 1080.0
 
 def on_key(window, key, scancode, action, mods):
     if glfw.GetKey(window, glfw.KEY_W) == glfw.PRESS:
@@ -43,20 +43,55 @@ def initWindow():
 
     return window
 
-def initPygame():
-    pygame.display.set_mode((WIDTH, HEIGHT), OPENGL|DOUBLEBUF)
+def initCamera():
+    eye = vec3([3,3,3], dtype='f')
+    target = vec3([0,0,-4], dtype='f')
+    up = vec3([0,1,0], dtype='f')
+
+    viewMatrix = camera.lookAt(eye, target, up)
+
+    return eye, viewMatrix
 
 def init():
-    #window = initWindow()
-    initPygame()
+    window = initWindow()
     program = shaderutil.createProgram('shaders/old.vert', 'shaders/old.frag')
     glUseProgram(program)
+    glEnable(GL_DEPTH_TEST)
+    glDepthFunc(GL_LEQUAL)
 
-    vertices = [-0.5, -0.5, 0.0,
-                -0.5, 0.5, 0.0,
-                0.5, -0.5, 0.0]
+    vertices = [
+    # front
+    -1.0, -1.0,  1.0,
+     1.0, -1.0,  1.0,
+     1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    # back
+    -1.0, -1.0, -1.0,
+     1.0, -1.0, -1.0,
+     1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0,
+    ]
     vertexData = np.array(vertices, dtype='f')
-    indices = [0,1,2]
+    indices = [
+        # front
+        0, 1, 2,
+        2, 3, 0,
+        # top
+        3, 2, 6,
+        6, 7, 3,
+        # back
+        7, 6, 5,
+        5, 4, 7,
+        # bottom
+        4, 5, 1,
+        1, 0, 4,
+        # left
+        4, 0, 3,
+        3, 7, 4,
+        # right
+        1, 5, 6,
+        6, 2, 1,
+    ]
     indexData = np.array(indices, dtype='uint32')
 
     vao = glGenVertexArrays(1)
@@ -72,9 +107,45 @@ def init():
     iBuffer.bind()
     glBindVertexArray(0)
 
-    vertices = [0.5, 0.5, 0.0,
-                -0.5, 0.5, 0.0,
-                0.5, -0.5, 0.0]
+    vertices = [
+    -0.3,-0.3,-0.3,
+    -0.3,-0.3, 0.3,
+    -0.3, 0.3, 0.3,
+    0.3, 0.3,-0.3,
+    -0.3,-0.3,-0.3,
+    -0.3, 0.3,-0.3,
+    0.3,-0.3, 0.3,
+    -0.3,-0.3,-0.3,
+    0.3,-0.3,-0.3,
+    0.3, 0.3,-0.3,
+    0.3,-0.3,-0.3,
+    -0.3,-0.3,-0.3,
+    -0.3,-0.3,-0.3,
+    -0.3, 0.3, 0.3,
+    -0.3, 0.3,-0.3,
+    0.3,-0.3, 0.3,
+    -0.3,-0.3, 0.3,
+    -0.3,-0.3,-0.3,
+    -0.3, 0.3, 0.3,
+    -0.3,-0.3, 0.3,
+    0.3,-0.3, 0.3,
+    0.3, 0.3, 0.3,
+    0.3,-0.3,-0.3,
+    0.3, 0.3,-0.3,
+    0.3,-0.3,-0.3,
+    0.3, 0.3, 0.3,
+    0.3,-0.3, 0.3,
+    0.3, 0.3, 0.3,
+    0.3, 0.3,-0.3,
+    -0.3, 0.3,-0.3,
+    0.3, 0.3, 0.3,
+    -0.3, 0.3,-0.3,
+    -0.3, 0.3, 0.3,
+    0.3, 0.3, 0.3,
+    -0.3, 0.3, 0.3,
+    0.3,-0.3, 0.3
+    ]
+
     vertexData = np.array(vertices, np.float32)
 
     vao2 = glGenVertexArrays(1)
@@ -86,28 +157,41 @@ def init():
     glVertexAttribPointer(glGetAttribLocation(program, "inPos"), 3,
             GL_FLOAT, GL_FALSE, 0, None)
     glBindVertexArray(0)
+    eye, viewMatrix = initCamera()
 
-
-    #while not glfw.WindowShouldClose(window):
-    while 1:
+    dt, oldTime = 0.0, 0.0
+    while not glfw.WindowShouldClose(window):
         #glfw.SetCursorPos(window, 300.0, 200.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        
-        glBindVertexArray(vao)
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, None)
 
-        glBindVertexArray(vao2)
-        glDrawArrays(GL_TRIANGLES, 0, 3)
+        currentTime = glfw.GetTime()
+        dt = currentTime - oldTime
+        oldTime = currentTime
+
+        mvpLoc = glGetUniformLocation(program, "mvpMatrix")
+        #modelMatrix = mat4.from_translation(vec3([0,0, -2]), dtype='f') * mat4.from_y_rotation(10, dtype='f')
+        modelMatrix = mat4.from_scale(vec3([0.8, 0.8, 0.8]), dtype='f') *\
+        mat4.from_y_rotation(currentTime, dtype='f') *\
+        mat4.from_x_rotation(currentTime, dtype='f') *\
+        mat4.from_translation(vec3([0,0, -4]), dtype='f') 
+        projMatrix = mat4.perspective_projection(60, 16.0/9.0, 0.1, 10000.0, dtype='f')
+        eye, viewMatrix = camera.getNewViewMatrixAndEye(window, dt, eye, WIDTH, HEIGHT)
+
+        glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, modelMatrix * viewMatrix * projMatrix)
+
+
+        glBindVertexArray(vao)
+        glDrawElements(GL_TRIANGLES, len(indexData), GL_UNSIGNED_INT, None)
+
+        #glDrawArrays(GL_TRIANGLES, 0, 12*3)
 
         # Swap front and back buffers
-        #glfw.SwapBuffers(window)
-        pygame.display.flip()
+        glfw.SwapBuffers(window)
 
         # Poll for and process events
-        #glfw.PollEvents()
-        pygame.time.wait(10)
+        glfw.PollEvents()
 
-    #glfw.Terminate()
+    glfw.Terminate()
 
 if __name__ == '__main__':
     init()
