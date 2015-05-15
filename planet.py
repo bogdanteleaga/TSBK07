@@ -33,9 +33,10 @@ class Planet(GameObject):
 
     def _setRandomStartingPoint(self):
         angle = random.randint(0, 360)
-        x = self.distance * math.cos(angle)
-        y = self.distance * math.sin(angle)
+        x = self.distance * math.cos(0)
+        y = self.distance * math.sin(0)
         self.position = vec3([x, y, 0])
+
     def _initModel(self):
         vertexPos, normals, textureCoords, indexData = createSphereCoords(self.radius)
         self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
