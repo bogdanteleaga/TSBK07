@@ -29,7 +29,7 @@ def initWindow():
     glfw.MakeContextCurrent(window)
 
     # Install a key handler
-    #glfw.SetInputMode(window, glfw.CURSOR, glfw.CURSOR_DISABLED)
+    glfw.SetInputMode(window, glfw.CURSOR, glfw.CURSOR_DISABLED)
 
     return window
 
@@ -79,7 +79,6 @@ def main():
     # Initialize objects
     planets = initPlanets(program)
 
-    mvpMatrixPos = glGetUniformLocation(program, "mvpMatrix")
     projMatrix = mat4.perspective_projection(60, float(WIDTH/HEIGHT), 0.1, 10000.0, dtype='f')
     eyePos = glGetAttribLocation(program, "eye")
 
@@ -95,16 +94,12 @@ def main():
         oldTime = currentTime
 
         eye, viewMatrix = camera.getNewViewMatrixAndEye(window, dt, eye, WIDTH, HEIGHT)
-        glUniform3fv(eyePos, 1, GL_FALSE, eye)
+        glUniform3fv(eyePos, 1, GL_FALSE, np.array(eye, dtype='f'))
 
         for planet in planets:
             planet.update()
 
-            #mvpMatrix = projMatrix * viewMatrix * planet.getModelMatrix()
-            mvpMatrix = planet.getModelMatrix() * viewMatrix * projMatrix
-            glUniformMatrix4fv(mvpMatrixPos, 1, GL_FALSE, mvpMatrix)
-
-            planet.draw()
+            planet.draw(viewMatrix, projMatrix)
 
         # Swap front and back buffers
         glfw.SwapBuffers(window)

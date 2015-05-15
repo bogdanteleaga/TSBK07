@@ -16,7 +16,7 @@ out vec4 outColor;
 void main(void)
 {
     vec3 lightSource = vec3(0.0, 0.0, 0.0);
-    vec3 lightColor = vec3(100.0, 100.0, 100.0);
+    vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
     vec3 n = normalize(normal);
     vec3 vertexToEye = normalize(eye - pos);
@@ -50,7 +50,7 @@ void main(void)
     light = (ambient + diffuse + specular);
 
     //float dist = length(pos - lightSource);
-    //light = light / (0.002 * dist + 0.007 * dist * dist);
+    //light = light / (0.0002 * dist + 0.0007 * dist * dist);
 
 
   	outColor = texture(tex, texCoord) * light;

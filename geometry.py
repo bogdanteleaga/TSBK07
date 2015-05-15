@@ -49,7 +49,6 @@ def createSphereCoords(radius):
             indexData.append(y)
             indexData.append(y + 1)
             indexData.append(x + 1)
-    print indexData
 
     return vertexPos, normals, textureCoords, indexData
 

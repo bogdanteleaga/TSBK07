@@ -44,11 +44,13 @@ class GameObject:
         glUniform1f(ksLoc, self.ks)
         glUniform1f(shininessLoc, self.shininess)
 
-    def draw(self):
+    def draw(self, viewMatrix, projMatrix):
         glBindVertexArray(self.vao)
 
-        # print self.getModelMatrix()
-        glUniformMatrix4fv(glGetUniformLocation(self.program, "mMatrix"), 1, GL_FALSE, self.getModelMatrix())
+        modelMatrix = self.getModelMatrix()
+        mvpMatrix = modelMatrix * viewMatrix * projMatrix
+        glUniformMatrix4fv(glGetUniformLocation(self.program, "mMatrix"), 1, GL_FALSE, modelMatrix)
+        glUniformMatrix4fv(glGetUniformLocation(self.program, "mvpMatrix"), 1, GL_FALSE, mvpMatrix)
 
         self._bindTextures()
         self._sendLightningParameters()
