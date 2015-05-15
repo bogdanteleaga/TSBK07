@@ -37,11 +37,11 @@ def initPlanets(program):
     sun = planet.Sun(name="Sun",
                      position=vec3([0,0,0]),
                      texImg="textures/sun.jpg",
-                     radius=43.25,
+                     radius=37.25,
                      mass=1.988435e30,
                      spin=0,
                      shininess=30,
-                     ka=0.1,
+                     ka=0.01,
                      kd=0.9,
                      ks=0.6,
                      program=program)
@@ -85,7 +85,7 @@ def main():
 
     eye, viewMatrix = initCamera()
 
-    dt, oldTime = 0.0, 0.0
+    dt, oldTime = 0.0, glfw.GetTime()
     while not glfw.WindowShouldClose(window):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glUseProgram(program)

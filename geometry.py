@@ -19,11 +19,11 @@ def createSphereCoords(radius):
             cosPhi = math.cos(phi)
 
             x = cosPhi * sinTheta
-            y = sinPhi * sinTheta
-            z = cosTheta
+            y = cosTheta
+            z = sinPhi * sinTheta
 
-            u = 1 - (lon / longBands)
-            v = 1 - (lat / latBands)
+            u = 1 - (lon / float(longBands))
+            v = 1 - (lat / float(latBands))
 
             normals.append(x)
             normals.append(y)

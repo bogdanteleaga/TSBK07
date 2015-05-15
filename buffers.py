@@ -10,24 +10,22 @@ def initializeVAO(program, vertexPos, normals, textureCoords, indexData):
     glBindVertexArray(vao)
 
     posVBO = vbo.VBO(np.array(vertexPos, dtype='f'))
-    normalVBO = vbo.VBO(np.array(normals, dtype='f'))
-    texVBO = vbo.VBO(np.array(textureCoords, dtype='f'))
-    indexVBO = vbo.VBO(np.array(indexData, dtype='uint32'), target=GL_ELEMENT_ARRAY_BUFFER)
-
     posVBO.bind()
-    normalVBO.bind()
-    texVBO.bind()
-    indexVBO.bind()
-
     glEnableVertexAttribArray(posLoc)
     glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, None)
 
+    normalVBO = vbo.VBO(np.array(normals, dtype='f'))
+    normalVBO.bind()
     glEnableVertexAttribArray(normalLoc)
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, GL_FALSE, 0, None)
 
+    texVBO = vbo.VBO(np.array(textureCoords, dtype='f'))
+    texVBO.bind()
     glEnableVertexAttribArray(texLoc)
     glVertexAttribPointer(texLoc, 2, GL_FLOAT, GL_FALSE, 0, None)
 
+    indexVBO = vbo.VBO(np.array(indexData, dtype='uint32'), target=GL_ELEMENT_ARRAY_BUFFER)
+    indexVBO.bind()
 
     glBindVertexArray(0)
 

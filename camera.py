@@ -6,8 +6,8 @@ import cyglfw3 as glfw
 
 horizontalAngle = 3.14
 verticalAngle = 0.0
-speed = 0.0166
-mouseSpeed = 0.0005
+speed = 0.166
+mouseSpeed = 0.00008
 
 def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
     global horizontalAngle
@@ -17,7 +17,6 @@ def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
 
     # Get mouse position
     x, y = glfw.GetCursorPos(window)
-    print x,y
 
     # Reset mouse position for next frame
     glfw.SetCursorPos(window, width/2.0, height/2.0);
