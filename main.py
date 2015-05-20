@@ -41,12 +41,12 @@ def initPlanets(program):
                      mass=1.988435e30,
                      spin=0,
                      shininess=30,
-                     ka=0.1,
+                     ka=1.0,
                      kd=0.9,
                      ks=0.6,
                      program=program)
 
-    mercury = planet.Planet(name="Mercuri",
+    mercury = planet.Planet(name="Mercury",
                             parent=sun,
                             texImg="textures/mercury.jpg",
                             radius=2.4,

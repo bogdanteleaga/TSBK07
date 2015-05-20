@@ -33,19 +33,19 @@ void main(void)
     float diffuseFactor = dot(n, lightDirection);
 
     if (diffuseFactor > 0)
-        diffuse = vec4(lightColor, 1.0) * kd * diffuseFactor;
+        diffuse = vec4(lightColor, 0.0) * kd * diffuseFactor;
 
     // Specular
     vec4 specular = vec4(0, 0, 0, 0);
 
     //Phong
-    vec3 reflected = normalize(reflect(lightDirection, n));
-    float specularFactor = dot(reflected, vertexToEye);
+    //vec3 reflected = normalize(reflect(lightDirection, n));
+    //float specularFactor = dot(reflected, vertexToEye);
     //Blinn-Phong
-    //vec3 halfway = normalize(vertexToEye + lightDirection);
-    //float specularFactor = dot(halfway, normal);
+    vec3 halfway = normalize(vertexToEye + lightDirection);
+    float specularFactor = dot(halfway, normal);
     if (specularFactor > 0)
-        specular = vec4(lightColor, 1.0) * ks * pow(specularFactor, shininess);
+        specular = vec4(lightColor, 0.0) * ks * pow(specularFactor, shininess);
 
     light = (ambient + diffuse + specular);
 

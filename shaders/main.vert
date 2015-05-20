@@ -13,7 +13,7 @@ uniform mat4 mMatrix;
 void main(void)
 {
   normal = mat3(mMatrix) * inNormal;
-  pos = mat3(mMatrix) * inPos;
+  pos = vec3(mMatrix * vec4(inPos, 1.0));
 
   gl_Position = mvpMatrix * vec4(inPos, 1.0);
 
