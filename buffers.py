@@ -1,6 +1,3 @@
-from OpenGL.GL import *
-from OpenGL.arrays import vbo
-import numpy as np
 
 def initializeVAO(program, vertexPos, normals, textureCoords, indexData):
     names = ["inPos", "inNormal", "inTex"]
