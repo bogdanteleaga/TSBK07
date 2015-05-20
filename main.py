@@ -1,9 +1,4 @@
 import sys
-import time
-import cyglfw3 as glfw
-from OpenGL.GL import *
-import shaderutil
-import numpy as np
 import camera
 import planet
 from pyrr import Vector3 as vec3
