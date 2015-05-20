@@ -57,7 +57,7 @@ def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
     # Strafe left
     if glfw.GetKey(window, glfw.KEY_LEFT) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_A) == glfw.PRESS:
         position -= right * dt * speed
-    if glfw.GetKey(window, glfw.KEY_Q) == glfw.PRESS:
+    if glfw.GetKey(window, glfw.KEY_Q) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_ESC) == glfw.PRESS:
         exit()
 
 
