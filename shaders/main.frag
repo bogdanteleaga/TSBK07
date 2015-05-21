@@ -43,7 +43,7 @@ void main(void)
     //float specularFactor = dot(reflected, vertexToEye);
     //Blinn-Phong
     vec3 halfway = normalize(vertexToEye + lightDirection);
-    float specularFactor = dot(halfway, normal);
+    float specularFactor = dot(halfway, n);
     if (specularFactor > 0)
         specular = vec4(lightColor, 0.0) * ks * pow(specularFactor, shininess);
 

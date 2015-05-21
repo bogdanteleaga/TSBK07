@@ -1,10 +1,16 @@
-from OpenGL.GL import *
+from OpenGL.GL import glGetAttribLocation, glEnableVertexAttribArray,\
+    glVertexAttribPointer, glBindVertexArray, glGenVertexArrays,\
+    glUseProgram, GL_FLOAT, GL_FALSE, GL_ELEMENT_ARRAY_BUFFER
 from OpenGL.arrays import vbo
 import numpy as np
 
-def initializeVAO(program, vertexPos, normals, textureCoords, indexData):
+
+def initializeVAO(program, vertexPos, normals, textureCoords, indexData=None,
+                  tangents=None):
+    glUseProgram(program)
     names = ["inPos", "inNormal", "inTex"]
-    posLoc, normalLoc, texLoc = [glGetAttribLocation(program, name) for name in names]
+    posLoc, normalLoc, texLoc = [glGetAttribLocation(program, name)
+                                 for name in names]
 
     vao = glGenVertexArrays(1)
     glBindVertexArray(vao)
@@ -24,9 +30,19 @@ def initializeVAO(program, vertexPos, normals, textureCoords, indexData):
     glEnableVertexAttribArray(texLoc)
     glVertexAttribPointer(texLoc, 2, GL_FLOAT, GL_FALSE, 0, None)
 
-    indexVBO = vbo.VBO(np.array(indexData, dtype='uint32'), target=GL_ELEMENT_ARRAY_BUFFER)
-    indexVBO.bind()
+    if tangents:
+        tanVBO = vbo.VBO(np.array(tangents, dtype='f'))
+        tanVBO.bind()
+        tanLoc = glGetAttribLocation(program, "inTan")
+        glEnableVertexAttribArray(tanLoc)
+        glVertexAttribPointer(tanLoc, 3, GL_FLOAT, GL_FALSE, 0, None)
+
+    if indexData:
+        indexVBO = vbo.VBO(np.array(indexData, dtype='uint32'),
+                           target=GL_ELEMENT_ARRAY_BUFFER)
+        indexVBO.bind()
 
     glBindVertexArray(0)
+    glUseProgram(0)
 
     return vao

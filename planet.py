@@ -3,25 +3,26 @@ import numpy as np
 from pyrr import Vector3 as vec3
 from pyrr import Matrix44 as mat4
 from buffers import initializeVAO
-from geometry import createSphereCoords
+from geometry import createSphereCoords, generateTangents
 from gameobject import GameObject
 import random
 import math
 
 G = 6.67384e-11
 METERS_PER_UNIT = 1000000000
-SEC_PER_STEP = 800
+SEC_PER_STEP = 80
 STEPS_PER_FRAME = 50
 
 class Planet(GameObject):
 
     def __init__(self, name=None, position=None, texImg=None, specTexImg=None,
-            radius=None, parent=None, mass=None, velocity=None, distance=None,
-            spin=None, shininess=None, ka=None, kd=None, ks=None,
-            program=None):
+                 normalMap=None, radius=None, parent=None, mass=None,
+                 velocity=None, distance=None, spin=None, shininess=None,
+                 ka=None, kd=None, ks=None, program=None):
         GameObject.__init__(self, name=name, position=position, texImg=texImg,
-                specTexImg=specTexImg, shininess=shininess, ka=ka, kd=kd,
-                ks=ks, program=program)
+                            specTexImg=specTexImg, normalMap=normalMap,
+                            shininess=shininess, ka=ka, kd=kd,
+                            ks=ks, program=program)
         self.parent = parent
         self.radius = radius
         self.mass = mass
@@ -32,14 +33,20 @@ class Planet(GameObject):
         self._initModel()
 
     def _setRandomStartingPoint(self):
-        angle = random.randint(0, 360)
+        #angle = random.randint(0, 360)
         x = self.distance * math.cos(0)
         y = self.distance * math.sin(0)
-        self.position = vec3([x, y, 0])
+        self.position = vec3([x, y, 0]) + self.parent.position
 
     def _initModel(self):
         vertexPos, normals, textureCoords, indexData = createSphereCoords(self.radius)
-        self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
+        if self.normalMap:
+            tangents = generateTangents(vertexPos, textureCoords, indexData)
+            self.vao = initializeVAO(self.program, vertexPos, normals,
+                                     textureCoords, indexData, tangents)
+        else:
+            self.vao = initializeVAO(self.program, vertexPos, normals,
+                                     textureCoords, indexData)
         self.indexLen = len(indexData)
 
     def _acceleration(self, dist, mass):
@@ -55,22 +62,29 @@ class Planet(GameObject):
 
             self.position += self.velocity * SEC_PER_STEP
 
-        self.spin += 0.001
+        #if self.name == "Earth":
+            #print 'Earth pos: ' + str(self.position) + '\nvel: ' + str(self.velocity)
+        #if self.name == "Moon":
+            #print 'Moon pos: ' + str(self.position) + '\nvel: ' + str(self.velocity)
+        self.spin += 0.1
 
     def getModelMatrix(self):
         # TODO: maybe spin planet around another axis and add scaling
-        #rot = mat4.from_y_rotation(self.spin, dtype='f')
+        rot = mat4.from_y_rotation(self.spin, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
-        return trans
+        return rot * trans
+
 
 class Sun(GameObject):
 
-    def __init__(self, name=None, position=None, texImg=None, specTexImg=None, radius=None,
-                       mass=None, spin=None, shininess=None, ka=None, kd=None,
-                       ks=None, program=None):
+    def __init__(self, name=None, position=None, texImg=None, specTexImg=None,
+                 normalMap=None, radius=None, mass=None, spin=None, shininess=None,
+                 ka=None, kd=None, ks=None, program=None):
         GameObject.__init__(self, name=name, position=position, texImg=texImg,
-                specTexImg=specTexImg, shininess=shininess, ka=ka, kd=kd,
-                ks=ks, program=program)
+                            specTexImg=specTexImg, normalMap=None,
+                            shininess=shininess, ka=ka, kd=kd, ks=ks,
+                            program=program)
+        self.velocity = vec3([0,0,0])
         self.radius = radius
         self.mass = mass
         self.spin = spin
