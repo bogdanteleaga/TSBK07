@@ -43,7 +43,7 @@ def initPlanets(classicProgram, normalMapProgram):
               texImg="textures/sun.jpg",
               radius=17.25,
               mass=1.988435e30,
-              spin=0,
+              spin=24.2,
               shininess=30,
               ka=1.0,
               kd=0.9,
@@ -57,7 +57,7 @@ def initPlanets(classicProgram, normalMapProgram):
                      mass=3.30104e23,
                      velocity=vec3([0, 0, 4.74e-5]),
                      distance=50.32,
-                     spin=0,
+                     spin=58.64,
                      shininess=30,
                      ka=0.5,
                      kd=0.9,
@@ -72,7 +72,7 @@ def initPlanets(classicProgram, normalMapProgram):
                    mass=4.86732e24,
                    velocity=vec3([0, 0, 3.5e-5]),
                    distance=108.0,
-                   spin=0,
+                   spin=-243.0,
                    shininess=30,
                    ka=0.5,
                    kd=0.9,
@@ -88,7 +88,7 @@ def initPlanets(classicProgram, normalMapProgram):
                    mass=5.9722e24,
                    velocity=vec3([0, 0, 2.963e-5]),
                    distance=150,
-                   spin=0,
+                   spin=1.0,
                    shininess=30,
                    ka=0.5,
                    kd=0.9,
@@ -104,7 +104,7 @@ def initPlanets(classicProgram, normalMapProgram):
                   mass=6.41693e23,
                   velocity=vec3([0, 0, 2.228175e-5]),
                   distance=227.94,
-                  spin=0,
+                  spin=1.05,
                   shininess=30,
                   ka=0.5,
                   kd=0.9,
@@ -143,6 +143,7 @@ def main():
     eye, viewMatrix = initCamera()
 
     dt, oldTime = 0.0, glfw.GetTime()
+    animation_speed = 800
     while not glfw.WindowShouldClose(window):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -150,14 +151,15 @@ def main():
         dt = currentTime - oldTime
         oldTime = currentTime
 
-        eye, viewMatrix = getNewViewMatrixAndEye(window,
-                                                 dt,
-                                                 eye,
-                                                 WIDTH,
-                                                 HEIGHT)
+        eye, viewMatrix, animation_speed = getNewViewMatrixAndEye(window,
+                                                                  animation_speed,
+                                                                  dt,
+                                                                  eye,
+                                                                  WIDTH,
+                                                                  HEIGHT)
 
         for planet in planets:
-            planet.update()
+            planet.update(animation_speed)
 
             planet.draw(eye, viewMatrix, projMatrix)
 

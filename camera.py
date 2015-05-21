@@ -11,7 +11,7 @@ verticalAngle = 0.0
 speed = 0.166
 mouseSpeed = 0.00008
 
-def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
+def getNewViewMatrixAndEye(window, animation_speed, dt, position, width=1920.0, height=1080.0):
     global horizontalAngle, verticalAngle
     global oldx, oldy, first
 
@@ -68,12 +68,16 @@ def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
         position -= right * dt * speed
     if glfw.GetKey(window, glfw.KEY_Q) == glfw.PRESS or glfw.GetKey(window, glfw.KEY_ESCAPE) == glfw.PRESS:
         exit()
+    if glfw.GetKey(window, glfw.KEY_J) == glfw.PRESS:
+        animation_speed += 100
+    if glfw.GetKey(window, glfw.KEY_K) == glfw.PRESS:
+        animation_speed -= 100
 
 
     # Camera matrix
     viewMatrix = lookAt(position, position + direction, up)
 
-    return position, viewMatrix
+    return position, viewMatrix, animation_speed
 
 
 def lookAt(eye, target, up):

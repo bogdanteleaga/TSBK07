@@ -10,8 +10,9 @@ import math
 
 G = 6.67384e-11
 METERS_PER_UNIT = 1000000000
-SEC_PER_STEP = 80
+SEC_PER_STEP = 800
 STEPS_PER_FRAME = 50
+SEC_PER_DAY = 24.0 * 60.0 * 60.0
 
 class Planet(GameObject):
 
@@ -29,6 +30,7 @@ class Planet(GameObject):
         self.velocity = velocity
         self.distance = distance
         self.spin = spin
+        self.rot = 0
         self._setRandomStartingPoint()
         self._initModel()
 
@@ -52,25 +54,22 @@ class Planet(GameObject):
     def _acceleration(self, dist, mass):
         return G * mass / (dist * dist)
 
-    def update(self):
+    def update(self, sec_per_step):
         star = self.parent
         for i in range(STEPS_PER_FRAME):
             d = (self.position - star.position).length
-            speed = self._acceleration(d * METERS_PER_UNIT, star.mass) * SEC_PER_STEP
+            speed = self._acceleration(d * METERS_PER_UNIT, star.mass) * sec_per_step
             vel = (star.position - self.position).normalised * (speed / METERS_PER_UNIT)
             self.velocity += vel
 
-            self.position += self.velocity * SEC_PER_STEP
+            self.position += self.velocity * sec_per_step
 
-        #if self.name == "Earth":
-            #print 'Earth pos: ' + str(self.position) + '\nvel: ' + str(self.velocity)
-        #if self.name == "Moon":
-            #print 'Moon pos: ' + str(self.position) + '\nvel: ' + str(self.velocity)
-        self.spin += 0.1
+        sec_per_frame = sec_per_step * STEPS_PER_FRAME
+        self.rot += sec_per_frame / (self.spin * SEC_PER_DAY) 
 
     def getModelMatrix(self):
         # TODO: maybe spin planet around another axis and add scaling
-        rot = mat4.from_y_rotation(self.spin, dtype='f')
+        rot = mat4.from_y_rotation(self.rot, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
         return rot * trans
 
@@ -88,6 +87,7 @@ class Sun(GameObject):
         self.radius = radius
         self.mass = mass
         self.spin = spin
+        self.rot = 0
         self._initModel()
 
     def _initModel(self):
@@ -95,14 +95,15 @@ class Sun(GameObject):
         self.vao = initializeVAO(self.program, vertexPos, normals, textureCoords, indexData)
         self.indexLen = len(indexData)
 
-    def update(self):
-        self.spin += 0.001
+    def update(self, sec_per_step):
+        sec_per_frame = sec_per_step * STEPS_PER_FRAME
+        self.rot += sec_per_frame / (self.spin * SEC_PER_DAY) 
 
     def getModelMatrix(self):
         # TODO: re-enable spin once it shows up
-        rot = mat4.from_y_rotation(self.spin, dtype='f')
+        rot = mat4.from_y_rotation(self.rot, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
-        return trans
+        return rot * trans
 
 class Cube(GameObject):
 
