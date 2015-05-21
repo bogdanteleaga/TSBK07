@@ -4,14 +4,20 @@ from pyrr import Vector3 as vec3
 import math
 import cyglfw3 as glfw
 
+oldx, oldy = 0.0, 0.0
+first = True
 horizontalAngle = 3.14
 verticalAngle = 0.0
 speed = 0.166
 mouseSpeed = 0.00008
 
 def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
-    global horizontalAngle
-    global verticalAngle
+    global horizontalAngle, verticalAngle
+    global oldx, oldy, first
+
+    if first:
+        oldx, oldy = glfw.GetCursorPos(window)
+        first = False
 
     dt = dt * 1000
 
@@ -19,11 +25,14 @@ def getNewViewMatrixAndEye(window, dt, position, width=1920.0, height=1080.0):
     x, y = glfw.GetCursorPos(window)
 
     # Reset mouse position for next frame
-    glfw.SetCursorPos(window, width/2.0, height/2.0);
+    #glfw.SetCursorPos(window, width/2.0, height/2.0);
 
     # Compute new orientation
-    horizontalAngle += mouseSpeed * dt * float(width/2.0 - x);
-    verticalAngle   += mouseSpeed * dt * float(height/2.0 - y);
+    horizontalAngle += mouseSpeed * dt * float(oldx - x);
+    verticalAngle   += mouseSpeed * dt * float(oldy - y);
+
+    oldx = x
+    oldy = y
 
     # Direction : Spherical coordinates to Cartesian coordinates conversion
     direction = vec3([

@@ -52,7 +52,7 @@ def initPlanets(classicProgram, normalMapProgram):
 
     mercury = Planet(name="Mercury",
                      parent=sun,
-                     texImg="textures/mercury.jpg",
+                     texImg="textures/old/mercury.jpg",
                      radius=2.4,
                      mass=3.30104e23,
                      velocity=vec3([0, 0, 4.74e-5]),
@@ -66,8 +66,8 @@ def initPlanets(classicProgram, normalMapProgram):
 
     venus = Planet(name="Venus",
                    parent=sun,
-                   texImg="textures/venus.jpg",
-                   normalMap="textures/venusnormal.png",
+                   texImg="textures/old/venus.jpg",
+                   #normalMap="textures/venusnormal.png",
                    radius=6.0,
                    mass=4.86732e24,
                    velocity=vec3([0, 0, 3.5e-5]),
@@ -77,12 +77,13 @@ def initPlanets(classicProgram, normalMapProgram):
                    ka=0.5,
                    kd=0.9,
                    ks=0.6,
-                   program=normalMapProgram)
+                   program=classicProgram)
+                   #program=normalMapProgram)
 
     earth = Planet(name="Earth",
                    parent=sun,
-                   texImg="textures/earth.png",
-                   normalMap="textures/earthnormal.png",
+                   texImg="textures/old/earth.jpg",
+                   #normalMap="textures/earthnormal.png",
                    radius=6.3,
                    mass=5.9722e24,
                    velocity=vec3([0, 0, 2.963e-5]),
@@ -92,12 +93,13 @@ def initPlanets(classicProgram, normalMapProgram):
                    ka=0.5,
                    kd=0.9,
                    ks=0.6,
-                   program=normalMapProgram)
+                   program=classicProgram)
+                   #program=normalMapProgram)
 
     mars = Planet(name="Mars",
                   parent=sun,
-                  texImg="textures/mars.png",
-                  normalMap="textures/marsnormal.png",
+                  texImg="textures/old/mars.jpg",
+                  #normalMap="textures/marsnormal.png",
                   radius=3.3,
                   mass=6.41693e23,
                   velocity=vec3([0, 0, 2.228175e-5]),
@@ -107,7 +109,8 @@ def initPlanets(classicProgram, normalMapProgram):
                   ka=0.5,
                   kd=0.9,
                   ks=0.6,
-                  program=normalMapProgram)
+                  program=classicProgram)
+                  #program=normalMapProgram)
 
     return [sun, mercury, venus, earth, mars]
 
