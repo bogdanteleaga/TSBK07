@@ -77,7 +77,7 @@ def getNewViewMatrixAndEye(window, animation_speed, dt, position, width=1920.0, 
     # Camera matrix
     viewMatrix = lookAt(position, position + direction, up)
 
-    return position, direction, viewMatrix, animation_speed
+    return horizontalAngle, verticalAngle, position, direction, right, up, viewMatrix, animation_speed
 
 
 def lookAt(eye, target, up):

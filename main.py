@@ -72,7 +72,7 @@ def main():
         dt = currentTime - oldTime
         oldTime = currentTime
 
-        eye, direction, viewMatrix, animation_speed = getNewViewMatrixAndEye(window,
+        hAngle, vAngle, eye, direction, right, up, viewMatrix, animation_speed = getNewViewMatrixAndEye(window,
                                                                   animation_speed,
                                                                   dt,
                                                                   eye,
@@ -84,7 +84,7 @@ def main():
 
             planet.draw(eye, viewMatrix, projMatrix)
 
-        spaceship.update(eye, direction)
+        spaceship.update(eye, direction, right, up, hAngle, vAngle)
         spaceship.draw(eye, viewMatrix, projMatrix)
         # Swap front and back buffers
         glfw.SwapBuffers(window)

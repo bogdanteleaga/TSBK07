@@ -29,9 +29,13 @@ class Spaceship(GameObject):
       glDrawArrays(GL_TRIANGLES, 0, self.count)
 			       
   def getModelMatrix(self):
-      scale = mat4.from_scale([0.3, 0.3, 0.3])
+      scale = mat4.from_scale([0.2, 0.2, 0.2])
+      roty = mat4.from_y_rotation(-self.hAngle)
+      rotx = mat4.from_x_rotation(self.vAngle)
       trans = mat4.from_translation(self.position, dtype='f')
-      return scale * trans
+      return scale * rotx * roty * trans
 	
-  def update(self, eye, target):
-      self.position = eye + target.normalised * 5
+  def update(self, eye, target, right, up, hAngle, vAngle):
+      self.vAngle = vAngle
+      self.hAngle = hAngle
+      self.position = eye + target.normalised * 7 + up.normalised * -2
