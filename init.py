@@ -3,13 +3,27 @@ from spaceship import Spaceship
 from skybox import Skybox
 from pyrr import Vector3 as vec3
 
-def initObjects(classicProgram, normalMapProgram, skyboxProgram):
+def initObjects(classicProgram, normalMapProgram, skyboxProgram, asteroidProgram):
     planets = initPlanets(classicProgram, normalMapProgram, highDef=False)
     spaceship = initSpaceship(classicProgram)
     skybox = initSkybox(skyboxProgram)
+    belt = initBelt(asteroidProgram)
+    return planets, spaceship, skybox, belt
 
-    return planets, spaceship, skybox
-
+def initBelt(program):
+    belt = Asteroids(filename='asteroid_model.obj',
+			  texImg='textures/asteroid_texture.png',
+                          shininess=30,
+                          ka=0.5,
+                          kd=0.9,
+                          ks=0.6,
+                          program=program,
+                          radius=270,
+                          offset=20,
+                          amount=10000
+                          )
+    return belt
+  
 def initSkybox(program):
     skybox = Skybox(filenames=[
                         #"textures/galaxy/stars_xPos.png",

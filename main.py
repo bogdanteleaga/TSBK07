@@ -54,7 +54,10 @@ def initShaders():
 
     skyboxProgram = Shader('shaders/skybox.vert',
                            'shaders/skybox.frag')
-
+    
+    asteroidProgram = Shader('shaders/asteroid.vert',
+                           'shaders/main.frag')
+    
     classicProgram.initializeAttribs("inPos", "inTex", "inNormal")
     classicProgram.initializeUniforms("mvpMatrix", "mMatrix", "ka", "kd", "ks",
                                       "shininess", "tex", "eye")
@@ -65,18 +68,22 @@ def initShaders():
 
     skyboxProgram.initializeAttribs("inPos");
     skyboxProgram.initializeUniforms("vMatrix", "pMatrix", "tex")
+    
+    asteroidProgram.initializeAttribs("inPos", "inTex", "inNormal")
+    asteroidProgram.initializeUniforms("vpMatrix", "ka", "kd", "ks",
+                                      "shininess", "tex", "eye")
 
-    return classicProgram, normalMapProgram, skyboxProgram
+    return classicProgram, normalMapProgram, skyboxProgram, asteroidProgram
  
 
 def main():
     window = initWindow()
-    classicProgram, normalMapProgram, skyboxProgram = initShaders()
+    classicProgram, normalMapProgram, skyboxProgram, asteroidProgram = initShaders()
     glEnable(GL_DEPTH_TEST)
 
     # Initialize objects
-    planets, spaceship, skybox = initObjects(classicProgram, normalMapProgram,
-                                             skyboxProgram)
+    planets, spaceship, skybox, belt = initObjects(classicProgram, normalMapProgram,
+                                             skyboxProgram, asteroidProgram)
 
     projMatrix = mat4.perspective_projection(60,
                                              float(WIDTH/HEIGHT),
@@ -108,6 +115,7 @@ def main():
 
         spaceship.update(eye, direction, right, up, hAngle, vAngle)
         spaceship.draw(eye, viewMatrix, projMatrix)
+        belt.draw(eye, viewMatrix, projMatrix)
         # Swap front and back buffers
         glfw.SwapBuffers(window)
 
