@@ -24,7 +24,7 @@ def loadObj(filename):
             n = map(float, values[1:4])
             normals.append(n)
         elif values[0] == "vt":		#Textures
-            t = map(float, values[1:4])
+            t = map(float, values[1:3])
             texCoords.append(t)
         elif values[0] == "f":		#Faces
 

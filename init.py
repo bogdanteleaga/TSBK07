@@ -30,6 +30,7 @@ def initSkybox(program):
 
 def initSpaceship(program):
     spaceship = Spaceship(filename='spaceship.obj',
+			  texImg='textures/metalic2.jpg',
                           shininess=30,
                           ka=0.5,
                           kd=0.9,
