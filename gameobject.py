@@ -29,13 +29,13 @@ class GameObject:
         self.initTextures()
 
     def initTextures(self):
-        self.texture = loadTexture(self.texImg, self.program)
+        self.texture = loadTexture(self.texImg, self.program) if self.texImg else None
         self.specTex = loadTexture(self.specTexImg, self.program) if self.specTexImg else None
         self.normalTex = loadTexture(self.normalMap, self.program) if self.normalMap else None
 
     def _bindTextures(self):
-        # TODO: send some uniform to shader to inform it of textures passed
-        activateTexture(self.texture, GL_TEXTURE0, self.program, "tex", 0)
+        if self.texture:
+            activateTexture(self.texture, GL_TEXTURE0, self.program, "tex", 0)
         if self.normalTex:
             activateTexture(self.normalTex, GL_TEXTURE1, self.program,
             "normalTex", 1)
@@ -50,6 +50,9 @@ class GameObject:
         glUniform1f(kdLoc, self.kd)
         glUniform1f(ksLoc, self.ks)
         glUniform1f(shininessLoc, self.shininess)
+
+    def drawCall(self):
+        glDrawElements(GL_TRIANGLES, self.indexLen, GL_UNSIGNED_INT, None)
 
     def draw(self, eye, viewMatrix, projMatrix):
         glUseProgram(self.program)
@@ -68,7 +71,7 @@ class GameObject:
         self._bindTextures()
         self._sendLightningParameters()
 
-        glDrawElements(GL_TRIANGLES, self.indexLen, GL_UNSIGNED_INT, None)
+        self.drawCall()
 
         glBindVertexArray(0)
         glUseProgram(0)
