@@ -78,7 +78,7 @@ def initPlanets(program):
 
     earth = planet.Planet(name="Earth",
                           parent=sun,
-                          texImg="textures/earth.jpg",
+                          texImg="textures/earth.png",
                           radius=6.3,
                           mass=5.9722e24,
                           velocity=vec3([0,0,2.963e-5]),
@@ -92,7 +92,7 @@ def initPlanets(program):
 
     mars = planet.Planet(name="Mars",
                          parent=sun,
-                         texImg="textures/mars.jpg",
+                         texImg="textures/old/mars.jpg",
                          radius=3.3,
                          mass=6.41693e23,
                          velocity=vec3([0,0,2.228175e-5]),

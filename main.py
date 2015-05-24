@@ -1,7 +1,7 @@
 import sys
 import cyglfw3 as glfw
 import numpy as np
-
+from objloader import *
 from OpenGL.GL import glClear, glEnable, glUseProgram, glGetAttribLocation, glUniform3fv,\
     GL_DEPTH_TEST, GL_FALSE, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT
 from shaderutil import createProgram
@@ -133,7 +133,13 @@ def main():
 
     # Initialize objects
     planets = initPlanets(classicProgram, normalMapProgram)
-
+    obj = OBJ(  filename='spaceship.obj',
+		shininess=30,
+                ka=0.5,
+                kd=0.9,
+                ks=0.6,
+                program = classicProgram)
+    
     projMatrix = mat4.perspective_projection(60,
                                              float(WIDTH/HEIGHT),
                                              0.1,
@@ -162,7 +168,7 @@ def main():
             planet.update(animation_speed)
 
             planet.draw(eye, viewMatrix, projMatrix)
-
+	obj.draw(viewMatrix,projMatrix)
         # Swap front and back buffers
         glfw.SwapBuffers(window)
 

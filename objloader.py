@@ -24,7 +24,7 @@ class OBJ:
         self.ka = ka
         self.kd = kd
         self.ks = ks
-	self.position = vec3([-30,0,0])
+	self.position = vec3([-20,0,0])
         self.program = program
         self._initModel()
         
@@ -46,9 +46,9 @@ class OBJ:
 	    for face in values[1:]:
 	      w = face.split('/')
 	      #OBJ Files are 1-indexed so we must substract 1 
-	      self.verticesOut.append(list(self.vertices[int(w[0])-1]))
-	      self.texcoordsOut.append(list(self.texcoords[int(w[1])-1]))
-	      self.normalsOut.append(list(self.normals[int(w[2])-1]))
+	      self.verticesOut.append(self.vertices[int(w[0])-1])
+	      self.texcoordsOut.append(self.texcoords[int(w[1])-1])
+	      self.normalsOut.append(self.normals[int(w[2])-1])
 
 	    self.indexData.append((self.verticesOut,self.texcoordsOut,self.normalsOut))  
 	    
