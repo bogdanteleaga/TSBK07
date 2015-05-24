@@ -5,8 +5,10 @@ from pyrr import Matrix44 as mat4
 from buffers import initializeVAO
 from gameobject import GameObject
 from objloader import loadObj
+from pyrr import euler as euler
 import random
 import math
+
 
 class Spaceship(GameObject):
 
@@ -16,6 +18,11 @@ class Spaceship(GameObject):
                             specTexImg=specTexImg, normalMap=normalMap,
                             shininess=shininess, ka=ka, kd=kd, ks=ks, 
                             program=program)
+	self.variables = dict([(x,True)for x in ["hAngle", "vAngle", "right"]])
+	self.oldhAngle = 0
+	self.oldvAngle = 0
+	self.zRotAngle = 0
+	self.xRotAngle = 0
         self.vertices, self.normals, self.texCoords = loadObj(filename)
 
         self._initModel()
@@ -27,15 +34,80 @@ class Spaceship(GameObject):
       
   def drawCall(self):
       glDrawArrays(GL_TRIANGLES, 0, self.count)
-			       
+			   
+  def difference(self, name, new):
+      if self.variables[name] is True:
+        self.variables[name] = new
+        return 0
+      diff = new - self.variables[name]
+      self.variables[name] = new
+      return diff;
+    
+  def getzRot(self, diff):
+      if diff > 0:
+        self.zRotAngle -= 0.05
+        if self.zRotAngle <= -1:
+	  self.zRotAngle = -1
+      if diff < 0:
+	self.zRotAngle += 0.05
+	if self.zRotAngle >= 1:
+	  self.zRotAngle = 1
+      if diff == 0:
+	if self.zRotAngle > 0.1:
+	  self.zRotAngle -= 0.09
+	elif self.zRotAngle < -0.1:
+	  self.zRotAngle += 0.09
+	else:
+	  self.zRotAngle = 0
+      return self.zRotAngle
+    
+  def getxRot(self, diff):
+      if diff > 0:
+        self.xRotAngle -= 0.05
+        if self.xRotAngle <= -0.6:
+	  self.xRotAngle = -0.6
+      if diff < 0:
+	self.xRotAngle += 0.05
+	if self.xRotAngle >= 0.6:
+	  self.xRotAngle = 0.6
+      if diff == 0:
+	if self.xRotAngle > 0.1:
+	  self.xRotAngle -= 0.09
+	elif self.xRotAngle < -0.1:
+	  self.xRotAngle += 0.09
+	else:
+	  self.xRotAngle = 0
+      return -self.xRotAngle + self.vAngle
+    
   def getModelMatrix(self):
       scale = mat4.from_scale([0.2, 0.2, 0.2])
+      #zdiff = self.hAngle - self.oldhAngle
+      #zAngle = self.getRot(zdiff)
+      
+      #e = euler.create(zAngle,self.hAngle,self.vAngle)
+      #e = euler.create(self.vAngle,self.hAngle,zAngle)
+      #rot = mat4.from_eulers(e,dtype='f')
+      
+      vdiff = self.vAngle - self.oldvAngle
+      
       roty = mat4.from_y_rotation(-self.hAngle)
       rotx = mat4.from_x_rotation(self.vAngle)
+      rotx = mat4.from_x_rotation(self.getxRot(vdiff))
+      
+      zdiff = self.hAngle - self.oldhAngle
+      
+      print self.xRotAngle
+      rotz = mat4.from_z_rotation(-self.getzRot(zdiff))
       trans = mat4.from_translation(self.position, dtype='f')
-      return scale * rotx * roty * trans
-	
-  def update(self, eye, target, right, up, hAngle, vAngle):
+      self.oldhAngle = self.hAngle
+      self.oldvAngle = self.vAngle
+      
+      return scale * rotz * rotx* roty * trans
+      #return scale * rot * trans
+    
+  def update(self, eye, direction, right, up, hAngle, vAngle):
       self.vAngle = vAngle
       self.hAngle = hAngle
-      self.position = eye + target.normalised * 7 + up.normalised * -2
+      self.position = eye + direction.normalised * 7 + up.normalised * -2
+      
+  

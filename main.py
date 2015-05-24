@@ -11,8 +11,8 @@ from pyrr import Vector3 as vec3
 from pyrr import Matrix44 as mat4
 
 VERSION = 3, 2
-WIDTH = 1920
-HEIGHT = 1080
+WIDTH = 1024
+HEIGHT = 768
 
 
 def initWindow():
@@ -81,7 +81,6 @@ def main():
 
         for planet in planets:
             planet.update(animation_speed)
-
             planet.draw(eye, viewMatrix, projMatrix)
 
         spaceship.update(eye, direction, right, up, hAngle, vAngle)
