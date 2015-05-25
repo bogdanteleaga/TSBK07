@@ -7,6 +7,7 @@ from OpenGL.GL import glClear, glEnable, glUseProgram, glGetAttribLocation, glUn
 from shaderutil import createProgram
 from camera import getNewViewMatrixAndEye, lookAt
 from planet import Planet, Sun
+from objloader import OBJ
 from pyrr import Vector3 as vec3
 from pyrr import Matrix44 as mat4
 
@@ -53,6 +54,7 @@ def initPlanets(classicProgram, normalMapProgram):
     mercury = Planet(name="Mercury",
                      parent=sun,
                      texImg="textures/old/mercury.jpg",
+                     #texImg="textures/mercury.jpg",
                      radius=2.4,
                      mass=3.30104e23,
                      velocity=vec3([0, 0, 4.74e-5]),
@@ -67,6 +69,7 @@ def initPlanets(classicProgram, normalMapProgram):
     venus = Planet(name="Venus",
                    parent=sun,
                    texImg="textures/old/venus.jpg",
+                   #texImg="textures/venus.jpg",
                    #normalMap="textures/venusnormal.png",
                    radius=6.0,
                    mass=4.86732e24,
@@ -83,6 +86,7 @@ def initPlanets(classicProgram, normalMapProgram):
     earth = Planet(name="Earth",
                    parent=sun,
                    texImg="textures/old/earth.jpg",
+                   #texImg="textures/earth.png",
                    #normalMap="textures/earthnormal.png",
                    radius=6.3,
                    mass=5.9722e24,
@@ -99,6 +103,7 @@ def initPlanets(classicProgram, normalMapProgram):
     mars = Planet(name="Mars",
                   parent=sun,
                   texImg="textures/old/mars.jpg",
+                  #texImg="textures/mars.png",
                   #normalMap="textures/marsnormal.png",
                   radius=3.3,
                   mass=6.41693e23,
@@ -134,6 +139,14 @@ def main():
     # Initialize objects
     planets = initPlanets(classicProgram, normalMapProgram)
 
+    obj = OBJ(filename='spaceship.obj',
+	      shininess=30,
+              ka=0.5,
+              kd=0.9,
+              ks=0.6,
+              program = classicProgram)
+
+
     projMatrix = mat4.perspective_projection(60,
                                              float(WIDTH/HEIGHT),
                                              0.1,
@@ -151,7 +164,7 @@ def main():
         dt = currentTime - oldTime
         oldTime = currentTime
 
-        eye, viewMatrix, animation_speed = getNewViewMatrixAndEye(window,
+        eye, direction, viewMatrix, animation_speed = getNewViewMatrixAndEye(window,
                                                                   animation_speed,
                                                                   dt,
                                                                   eye,
@@ -163,6 +176,9 @@ def main():
 
             planet.draw(eye, viewMatrix, projMatrix)
 
+        print direction
+        obj.update(eye, direction)
+        obj.draw(viewMatrix, projMatrix)
         # Swap front and back buffers
         glfw.SwapBuffers(window)
 
