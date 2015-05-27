@@ -1,14 +1,15 @@
 from planet import Planet, Sun
 from spaceship import Spaceship
+from asteroids import Asteroids
 from skybox import Skybox
 from pyrr import Vector3 as vec3
 
 def initObjects(classicProgram, normalMapProgram, skyboxProgram, asteroidProgram):
     planets = initPlanets(classicProgram, normalMapProgram, highDef=False)
     spaceship = initSpaceship(classicProgram)
-    skybox = initSkybox(skyboxProgram)
+    #skybox = initSkybox(skyboxProgram)
     belt = initBelt(asteroidProgram)
-    return planets, spaceship, skybox, belt
+    return planets, spaceship, belt
 
 def initBelt(program):
     belt = Asteroids(filename='asteroid_model.obj',
@@ -19,8 +20,8 @@ def initBelt(program):
                           ks=0.6,
                           program=program,
                           radius=270,
-                          offset=20,
-                          amount=10000
+                          offset=25,
+                          amount=1000000
                           )
     return belt
   
@@ -43,7 +44,7 @@ def initSkybox(program):
     return skybox
 
 def initSpaceship(program):
-    spaceship = Spaceship(filename='spaceship.obj',
+    spaceship = Spaceship(filename='asteroid_model.obj',
 			  texImg='textures/metalic2.jpg',
                           shininess=30,
                           ka=0.5,

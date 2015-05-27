@@ -1,8 +1,8 @@
 #version 330
 
-in vec3 inPos;
-in vec3 inNormal;
-in vec2 inTex;
+layout (location = 0) in vec3 inPos;
+layout (location = 1) in vec3 inNormal;
+layout (location = 2) in vec2 inTex;
 layout (location = 3) in mat4 instanceMatrix;
 out vec2 texCoord;
 out vec3 normal;

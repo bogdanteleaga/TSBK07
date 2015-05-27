@@ -35,7 +35,8 @@ def loadObj(filename):
                   verticesOut.append(vertex)
               for texCoord in texCoords[int(w[1])-1]:
                   texCoordsOut.append(texCoord)
-              for normal in normals[int(w[2])-1]:
-                  normalsOut.append(normal)
+              if len(normals)>0:
+                  for normal in normals[int(w[2])-1]:
+                      normalsOut.append(normal)
 
     return verticesOut, normalsOut, texCoordsOut
