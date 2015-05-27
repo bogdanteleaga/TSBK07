@@ -11,8 +11,11 @@ def initializeVAO(program, vertexPos, normals, textureCoords, indexData=None,
     names = ["inPos", "inNormal", "inTex"]
     posLoc, normalLoc, texLoc = [program.glAttribs[name]
                                  for name in names]
+    print program
+    print posLoc, normalLoc, texLoc
 
     vao = glGenVertexArrays(1)
+
     glBindVertexArray(vao)
 
     posVBO = vbo.VBO(np.array(vertexPos, dtype='f'))

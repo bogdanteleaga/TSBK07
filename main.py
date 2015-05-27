@@ -11,8 +11,8 @@ from pyrr import Vector3 as vec3
 from pyrr import Matrix44 as mat4
 
 VERSION = 3, 2
-WIDTH = 1024
-HEIGHT = 768
+WIDTH = 1920    
+HEIGHT = 1080
 
 
 def initWindow():
@@ -46,26 +46,37 @@ def initCamera():
     return eye, viewMatrix
 
 def initShaders():
-    classicProgram = Shader('shaders/main.vert', 'shaders/main.frag')
+    classicProgram = Shader('shaders/main.vert',
+                            'shaders/main.frag')
+
     normalMapProgram = Shader('shaders/normalMapping.vert',
                               'shaders/normalMapping.frag')
+
+    skyboxProgram = Shader('shaders/skybox.vert',
+                           'shaders/skybox.frag')
+
     classicProgram.initializeAttribs("inPos", "inTex", "inNormal")
     classicProgram.initializeUniforms("mvpMatrix", "mMatrix", "ka", "kd", "ks",
                                       "shininess", "tex", "eye")
+
     normalMapProgram.initializeAttribs("inPos", "inTex", "inNormal", "inTan")
     normalMapProgram.initializeUniforms("mvpMatrix", "mMatrix", "ka", "kd",
                                         "ks", "shininess", "tex", "normalTex", "eye")
 
-    return classicProgram, normalMapProgram
+    skyboxProgram.initializeAttribs("inPos");
+    skyboxProgram.initializeUniforms("vMatrix", "pMatrix", "tex")
+
+    return classicProgram, normalMapProgram, skyboxProgram
  
 
 def main():
     window = initWindow()
-    classicProgram, normalMapProgram = initShaders()
+    classicProgram, normalMapProgram, skyboxProgram = initShaders()
     glEnable(GL_DEPTH_TEST)
 
     # Initialize objects
-    planets, spaceship = initObjects(classicProgram, normalMapProgram)
+    planets, spaceship, skybox = initObjects(classicProgram, normalMapProgram,
+                                             skyboxProgram)
 
     projMatrix = mat4.perspective_projection(60,
                                              float(WIDTH/HEIGHT),
@@ -90,6 +101,7 @@ def main():
                                                                   WIDTH,
                                                                   HEIGHT)
 
+        skybox.draw(viewMatrix, projMatrix)
         for planet in planets:
             planet.update(animation_speed)
             planet.draw(eye, viewMatrix, projMatrix)

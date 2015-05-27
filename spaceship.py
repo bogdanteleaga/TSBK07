@@ -96,7 +96,6 @@ class Spaceship(GameObject):
       
       zdiff = self.hAngle - self.oldhAngle
       
-      print self.xRotAngle
       rotz = mat4.from_z_rotation(-self.getzRot(zdiff))
       trans = mat4.from_translation(self.position, dtype='f')
       self.oldhAngle = self.hAngle

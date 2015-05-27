@@ -1,12 +1,32 @@
 from planet import Planet, Sun
 from spaceship import Spaceship
+from skybox import Skybox
 from pyrr import Vector3 as vec3
 
-def initObjects(classicProgram, normalMapProgram):
+def initObjects(classicProgram, normalMapProgram, skyboxProgram):
     planets = initPlanets(classicProgram, normalMapProgram, highDef=False)
     spaceship = initSpaceship(classicProgram)
+    skybox = initSkybox(skyboxProgram)
 
-    return planets, spaceship
+    return planets, spaceship, skybox
+
+def initSkybox(program):
+    skybox = Skybox(filenames=[
+                        #"textures/galaxy/stars_xPos.png",
+                        #"textures/galaxy/stars_xNeg.png",
+                        #"textures/galaxy/stars_yPos.png",
+                        #"textures/galaxy/stars_yNeg.png",
+                        "textures/galaxy/stars_zPos.png",
+                        "textures/galaxy/stars_zPos.png",
+                        "textures/galaxy/stars_zPos.png",
+                        "textures/galaxy/stars_zPos.png",
+                        "textures/galaxy/stars_zPos.png",
+                        "textures/galaxy/stars_zPos.png",
+                        #"textures/galaxy/stars_zNeg.png"
+                        ],
+                    program=program)
+
+    return skybox
 
 def initSpaceship(program):
     spaceship = Spaceship(filename='spaceship.obj',

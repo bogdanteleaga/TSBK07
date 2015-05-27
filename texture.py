@@ -31,8 +31,32 @@ def loadTexture(filename, program):
     glUseProgram(0)
     return texture
 
-def activateTexture(texture, index, program, name, nr):
+def activateTexture(texture, index, program, name, nr, texType=GL_TEXTURE_2D):
     texLoc = program.glUniforms[name]
     glUniform1i(texLoc, nr)
     glActiveTexture(index)
-    glBindTexture(GL_TEXTURE_2D, texture)
+    glBindTexture(texType, texture)
+
+def loadCubeMap(program, filenames):
+    texture = glGenTextures(1)
+
+    glUseProgram(program.pointer)
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture)
+    print filenames
+    for i, filename in enumerate(filenames):
+        print filename
+        img = Image.open(filename)
+        imgData = np.array(list(img.getdata()), np.int8)
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB,
+                     img.size[0], img.size[1], 0, GL_RGB, 
+                     GL_UNSIGNED_BYTE, imgData)
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+
+    glUseProgram(0)
+    return texture
+ 
