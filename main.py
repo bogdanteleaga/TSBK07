@@ -4,7 +4,7 @@ import numpy as np
 from objloader import *
 from OpenGL.GL import glClear, glEnable, glUseProgram, glGetAttribLocation, glUniform3fv,\
     GL_DEPTH_TEST, GL_FALSE, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT
-from shaderutil import createProgram
+from shaderutil import Shader
 from camera import getNewViewMatrixAndEye, lookAt
 from init import initObjects
 from pyrr import Vector3 as vec3
@@ -45,12 +45,23 @@ def initCamera():
 
     return eye, viewMatrix
 
+def initShaders():
+    classicProgram = Shader('shaders/main.vert', 'shaders/main.frag')
+    normalMapProgram = Shader('shaders/normalMapping.vert',
+                              'shaders/normalMapping.frag')
+    classicProgram.initializeAttribs("inPos", "inTex", "inNormal")
+    classicProgram.initializeUniforms("mvpMatrix", "mMatrix", "ka", "kd", "ks",
+                                      "shininess", "tex", "eye")
+    normalMapProgram.initializeAttribs("inPos", "inTex", "inNormal", "inTan")
+    normalMapProgram.initializeUniforms("mvpMatrix", "mMatrix", "ka", "kd",
+                                        "ks", "shininess", "tex", "normalTex", "eye")
+
+    return classicProgram, normalMapProgram
+ 
 
 def main():
     window = initWindow()
-    classicProgram = createProgram('shaders/main.vert', 'shaders/main.frag')
-    normalMapProgram = createProgram('shaders/normalMapping.vert',
-            'shaders/normalMapping.frag')
+    classicProgram, normalMapProgram = initShaders()
     glEnable(GL_DEPTH_TEST)
 
     # Initialize objects

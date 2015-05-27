@@ -44,28 +44,26 @@ class GameObject:
             activateTexture(self.specTex, GL_TEXTURE1, self.program)
 
     def _sendLightningParameters(self):
-        names = ["ka", "kd", "ks", "shininess"]
-        kaLoc, kdLoc, ksLoc, shininessLoc = [glGetUniformLocation(self.program, name) for name in names]
-        glUniform1f(kaLoc, self.ka)
-        glUniform1f(kdLoc, self.kd)
-        glUniform1f(ksLoc, self.ks)
-        glUniform1f(shininessLoc, self.shininess)
+        glUniform1f(self.program.glUniforms["ka"], self.ka)
+        glUniform1f(self.program.glUniforms["kd"], self.kd)
+        glUniform1f(self.program.glUniforms["ks"], self.ks)
+        glUniform1f(self.program.glUniforms["shininess"], self.shininess)
 
     def drawCall(self):
         glDrawElements(GL_TRIANGLES, self.indexLen, GL_UNSIGNED_INT, None)
 
     def draw(self, eye, viewMatrix, projMatrix):
-        glUseProgram(self.program)
+        glUseProgram(self.program.pointer)
         glBindVertexArray(self.vao)
 
-        eyePos = glGetAttribLocation(self.program, "eye")
+        eyePos = self.program.glUniforms["eye"]
         glUniform3fv(eyePos, 1, GL_FALSE, eye)
 
         modelMatrix = self.getModelMatrix()
         mvpMatrix = modelMatrix * viewMatrix * projMatrix
-        glUniformMatrix4fv(glGetUniformLocation(self.program, "mMatrix"), 1,
+        glUniformMatrix4fv(self.program.glUniforms["mMatrix"], 1,
                            GL_FALSE, modelMatrix)
-        glUniformMatrix4fv(glGetUniformLocation(self.program, "mvpMatrix"), 1,
+        glUniformMatrix4fv(self.program.glUniforms["mvpMatrix"], 1,
                            GL_FALSE, mvpMatrix)
 
         self._bindTextures()

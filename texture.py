@@ -18,7 +18,7 @@ def loadTexture(filename, program):
     imgData = np.array(list(img.getdata()), np.int8)
     texture = glGenTextures(1)
 
-    glUseProgram(program)
+    glUseProgram(program.pointer)
     glPixelStorei(GL_UNPACK_ALIGNMENT,1)
     glBindTexture(GL_TEXTURE_2D, texture)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
@@ -32,7 +32,7 @@ def loadTexture(filename, program):
     return texture
 
 def activateTexture(texture, index, program, name, nr):
-    texLoc = glGetUniformLocation(program, name)
+    texLoc = program.glUniforms[name]
     glUniform1i(texLoc, nr)
     glActiveTexture(index)
     glBindTexture(GL_TEXTURE_2D, texture)

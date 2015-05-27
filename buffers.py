@@ -7,9 +7,9 @@ import numpy as np
 
 def initializeVAO(program, vertexPos, normals, textureCoords, indexData=None,
                   tangents=None):
-    glUseProgram(program)
+    glUseProgram(program.pointer)
     names = ["inPos", "inNormal", "inTex"]
-    posLoc, normalLoc, texLoc = [glGetAttribLocation(program, name)
+    posLoc, normalLoc, texLoc = [program.glAttribs[name]
                                  for name in names]
 
     vao = glGenVertexArrays(1)
@@ -33,7 +33,7 @@ def initializeVAO(program, vertexPos, normals, textureCoords, indexData=None,
     if tangents:
         tanVBO = vbo.VBO(np.array(tangents, dtype='f'))
         tanVBO.bind()
-        tanLoc = glGetAttribLocation(program, "inTan")
+        tanLoc = program.glAttribs["inTan"]
         glEnableVertexAttribArray(tanLoc)
         glVertexAttribPointer(tanLoc, 3, GL_FLOAT, GL_FALSE, 0, None)
 
