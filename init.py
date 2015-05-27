@@ -30,7 +30,7 @@ def initPlanets(classicProgram, normalMapProgram, highDef=None):
               ka=1.0,
               kd=0.9,
               ks=0.6,
-              program=p)
+              program=classicProgram)
 
     mercury = Planet(name="Mercury",
                      parent=sun,
@@ -45,7 +45,7 @@ def initPlanets(classicProgram, normalMapProgram, highDef=None):
                      ka=0.5,
                      kd=0.9,
                      ks=0.6,
-                     program=p)
+                     program=classicProgram)
 
     venus = Planet(name="Venus",
                    parent=sun,

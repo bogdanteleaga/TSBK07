@@ -29,7 +29,7 @@ class Spaceship(GameObject):
 
   def _initModel(self):
       self.vao = initializeVAO(self.program, self.vertices,
-                               self.texCoords, self.normals)
+                               self.normals, self.texCoords)
       self.count = len(self.vertices) / 3
       
   def drawCall(self):
