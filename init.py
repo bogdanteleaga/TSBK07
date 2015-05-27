@@ -14,7 +14,7 @@ def initObjects(classicProgram, normalMapProgram, skyboxProgram, asteroidProgram
     return planets, spaceship, skybox, belt
 
 def initBelt(program):
-    belt = Asteroids(filename='asteroid_model.obj',
+    belt = Asteroids(filename='objects/asteroid_model.obj',
 			  texImg='textures/asteroid_texture.png',
                           shininess=30,
                           ka=0.5,
@@ -46,7 +46,7 @@ def initSkybox(program):
     return skybox
 
 def initSpaceship(program):
-    spaceship = Spaceship(filename='spaceship.obj',
+    spaceship = Spaceship(filename='objects/spaceship.obj',
 			  texImg='textures/metalic2.jpg',
                           shininess=30,
                           ka=0.5,
