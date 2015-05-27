@@ -82,7 +82,7 @@ def main():
     glEnable(GL_DEPTH_TEST)
 
     # Initialize objects
-    planets, spaceship, belt = initObjects(classicProgram, normalMapProgram,
+    planets, spaceship, skybox, belt = initObjects(classicProgram, normalMapProgram,
                                              skyboxProgram, asteroidProgram)
 
     projMatrix = mat4.perspective_projection(60,
@@ -108,14 +108,14 @@ def main():
                                                                   WIDTH,
                                                                   HEIGHT)
 
-        #skybox.draw(viewMatrix, projMatrix)
+        skybox.draw(viewMatrix, projMatrix)
         for planet in planets:
             planet.update(animation_speed)
             planet.draw(eye, viewMatrix, projMatrix)
 
         spaceship.update(eye, direction, right, up, hAngle, vAngle)
         spaceship.draw(eye, viewMatrix, projMatrix)
-        belt.update(0.01)
+        belt.update(0.1)
         belt.draw(eye, viewMatrix, projMatrix)
         # Swap front and back buffers
         glfw.SwapBuffers(window)

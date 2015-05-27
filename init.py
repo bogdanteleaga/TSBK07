@@ -7,9 +7,11 @@ from pyrr import Vector3 as vec3
 def initObjects(classicProgram, normalMapProgram, skyboxProgram, asteroidProgram):
     planets = initPlanets(classicProgram, normalMapProgram, highDef=False)
     spaceship = initSpaceship(classicProgram)
-    #skybox = initSkybox(skyboxProgram)
+    skybox = initSkybox(skyboxProgram)
+    print 'loading belt'
     belt = initBelt(asteroidProgram)
-    return planets, spaceship, belt
+    print 'loaded belt'
+    return planets, spaceship, skybox, belt
 
 def initBelt(program):
     belt = Asteroids(filename='asteroid_model.obj',
@@ -19,9 +21,9 @@ def initBelt(program):
                           kd=0.9,
                           ks=0.6,
                           program=program,
-                          radius=270,
-                          offset=25,
-                          amount=1000000
+                          radius=500,
+                          offset=100,
+                          amount=100000
                           )
     return belt
   
@@ -44,7 +46,7 @@ def initSkybox(program):
     return skybox
 
 def initSpaceship(program):
-    spaceship = Spaceship(filename='asteroid_model.obj',
+    spaceship = Spaceship(filename='spaceship.obj',
 			  texImg='textures/metalic2.jpg',
                           shininess=30,
                           ka=0.5,
@@ -122,7 +124,7 @@ def initPlanets(classicProgram, normalMapProgram, highDef=None):
                   normalMap="textures/marsnormal.png" if highDef else None,
                   radius=3.3,
                   mass=6.41693e23,
-                  velocity=vec3([0, 0, 2.228175e-5]),
+                  velocity=vec3([0, 0, 2.41e-5]),
                   distance=227.94,
                   spin=1.05,
                   shininess=30,
@@ -131,6 +133,64 @@ def initPlanets(classicProgram, normalMapProgram, highDef=None):
                   ks=0.6,
                   program=p)
 
-    return [sun, mercury, venus, earth, mars]
+    jupiter = Planet(name="Jupiter",
+                  parent=sun,
+                  texImg="textures/jupiter.jpg",
+                  radius=71.4,
+                  mass=2e27,
+                  velocity=vec3([0, 0, 1.31e-5]),
+                  distance=778,
+                  spin=0.4,
+                  shininess=30,
+                  ka=0.5,
+                  kd=0.9,
+                  ks=0.6,
+                  program=classicProgram)
+
+    saturn = Planet(name="Saturn",
+                  parent=sun,
+                  texImg="textures/saturn.jpg",
+                  radius=60.2,
+                  mass=5.7e26,
+                  velocity=vec3([0, 0, 0.96e-5]),
+                  distance=1427,
+                  spin=0.42,
+                  shininess=30,
+                  ka=0.5,
+                  kd=0.9,
+                  ks=0.6,
+                  program=classicProgram)
+
+    uranus = Planet(name="Uranus",
+                  parent=sun,
+                  texImg="textures/uranus.jpg",
+                  radius=25.55,
+                  mass=8.7e25,
+                  velocity=vec3([0, 0, 0.68e-5]),
+                  distance=2871,
+                  spin=0.72,
+                  shininess=30,
+                  ka=0.5,
+                  kd=0.9,
+                  ks=0.6,
+                  program=p)
+
+    neptune = Planet(name="Neptune",
+                  parent=sun,
+                  texImg="textures/neptune.jpg",
+                  radius=24.764,
+                  mass=1e26,
+                  velocity=vec3([0, 0, 0.54e-5]),
+                  distance=4500,
+                  spin=0.62,
+                  shininess=30,
+                  ka=0.5,
+                  kd=0.9,
+                  ks=0.6,
+                  program=p)
+
+
+
+    return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]
 
 
