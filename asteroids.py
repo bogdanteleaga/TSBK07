@@ -112,15 +112,14 @@ class Asteroids(GameObject):
 	displacement = (random() * (2 * self.offset)) - self.offset
 	x = sin(angle) * self.radius + displacement
 	displacement = (random() * (2 * self.offset)) - self.offset
-	y = displacement * 0.4
+	y = displacement * 0.2
 	displacement = (random() * (2 * self.offset)) - self.offset
 	z = cos(angle) * self.radius + displacement
 	translation = mat4.from_translation(vec3([x,y,z]), dtype='f')
 	#scale between 0.05 and 0.25
-        scaleFactor = random() % 20 / 100.0 + 0.05
+        scaleFactor = random() * 50 / 100.0 + 0.05
         scale = mat4.from_scale(vec3([scaleFactor, scaleFactor, scaleFactor]), dtype='f')
 	#add random rotation around x
         rotation = mat4.from_x_rotation(self.rot, dtype='f')
 	#add to list of matrices
         self.modelMatrices[i] = scale * rotation * translation
-	

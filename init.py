@@ -22,8 +22,8 @@ def initBelt(program):
                           ks=0.6,
                           program=program,
                           radius=500,
-                          offset=100,
-                          amount=100000
+                          offset=140,
+                          amount=50000
                           )
     return belt
   

@@ -3,7 +3,8 @@ import cyglfw3 as glfw
 import numpy as np
 from objloader import *
 from OpenGL.GL import glClear, glEnable, glUseProgram, glGetAttribLocation, glUniform3fv,\
-    GL_DEPTH_TEST, GL_FALSE, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT
+    GL_DEPTH_TEST, GL_FALSE, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT,\
+    glDepthFunc, GL_LESS
 from shaderutil import Shader
 from camera import getNewViewMatrixAndEye, lookAt
 from init import initObjects
@@ -80,6 +81,7 @@ def main():
     window = initWindow()
     classicProgram, normalMapProgram, skyboxProgram, asteroidProgram = initShaders()
     glEnable(GL_DEPTH_TEST)
+    glDepthFunc(GL_LESS)
 
     # Initialize objects
     planets, spaceship, skybox, belt = initObjects(classicProgram, normalMapProgram,
@@ -108,15 +110,17 @@ def main():
                                                                   WIDTH,
                                                                   HEIGHT)
 
-        skybox.draw(viewMatrix, projMatrix)
         for planet in planets:
             planet.update(animation_speed)
             planet.draw(eye, viewMatrix, projMatrix)
 
         spaceship.update(eye, direction, right, up, hAngle, vAngle)
         spaceship.draw(eye, viewMatrix, projMatrix)
+
         belt.update(0.1)
         belt.draw(eye, viewMatrix, projMatrix)
+
+        skybox.draw(viewMatrix, projMatrix)
         # Swap front and back buffers
         glfw.SwapBuffers(window)
 

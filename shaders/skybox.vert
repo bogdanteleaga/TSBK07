@@ -8,7 +8,8 @@ uniform mat4 pMatrix;
 
 void main(void)
 {
-  gl_Position = pMatrix * vec4(mat3(vMatrix) * inPos, 1.0);
+  vec4 position = pMatrix * vec4(mat3(vMatrix) * inPos, 1.0);
+  gl_Position = position.xyww;
 
   texCoord = inPos;
 }

@@ -87,7 +87,7 @@ class Skybox():
     def draw(self, viewMatrix, projMatrix):
         glUseProgram(self.program.pointer)
         glBindVertexArray(self.vao)
-        glDisable(GL_DEPTH_TEST)
+        glDepthFunc(GL_LEQUAL)
   
         glUniformMatrix4fv(self.program.glUniforms["vMatrix"], 1,
                            GL_FALSE, viewMatrix)
@@ -96,6 +96,7 @@ class Skybox():
   
         activateTexture(self.texture, GL_TEXTURE0, self.program, "tex", 0, texType=GL_TEXTURE_CUBE_MAP)
         self.drawCall()
+
+        glDepthFunc(GL_LESS) # Back to default
   
-        glEnable(GL_DEPTH_TEST)
         glBindVertexArray(0)
