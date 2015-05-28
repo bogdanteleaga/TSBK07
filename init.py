@@ -5,17 +5,19 @@ from skybox import Skybox
 from pyrr import Vector3 as vec3
 
 def initObjects(classicProgram, normalMapProgram, skyboxProgram, asteroidProgram):
-    planets = initPlanets(classicProgram, normalMapProgram, highDef=False)
+    print 'loading planets'
+    planets = initPlanets(classicProgram, normalMapProgram, highDef=True)
+    print 'loading spaceship'
     spaceship = initSpaceship(classicProgram)
-    skybox = initSkybox(skyboxProgram)
+    print 'loading skybox'
+    skybox = initSkybox(skyboxProgram, highDef=False)
     print 'loading belt'
     belt = initBelt(asteroidProgram)
-    print 'loaded belt'
     return planets, spaceship, skybox, belt
 
 def initBelt(program):
-    belt = Asteroids(filename='objects/asteroid_model.obj',
-			  texImg='textures/asteroid_texture.png',
+    belt = Asteroids(filename='objects/ida.obj',
+			  texImg='textures/ida.jpg',
                           shininess=30,
                           ka=0.5,
                           kd=0.9,
@@ -23,24 +25,34 @@ def initBelt(program):
                           program=program,
                           radius=500,
                           offset=140,
-                          amount=50000
+                          amount=3000
                           )
     return belt
   
-def initSkybox(program):
-    skybox = Skybox(filenames=[
-                        #"textures/galaxy/stars_xPos.png",
-                        #"textures/galaxy/stars_xNeg.png",
-                        #"textures/galaxy/stars_yPos.png",
-                        #"textures/galaxy/stars_yNeg.png",
-                        "textures/galaxy/stars_zPos.png",
-                        "textures/galaxy/stars_zPos.png",
-                        "textures/galaxy/stars_zPos.png",
-                        "textures/galaxy/stars_zPos.png",
-                        "textures/galaxy/stars_zPos.png",
-                        "textures/galaxy/stars_zPos.png",
-                        #"textures/galaxy/stars_zNeg.png"
-                        ],
+def initSkybox(program, highDef=False):
+    if not highDef:
+        # The other sides look pretty bad so we just duplicate this one
+        filenames = [#"textures/galaxy/stars_xPos.png",
+                     #"textures/galaxy/stars_xNeg.png",
+                     #"textures/galaxy/stars_yPos.png",
+                     #"textures/galaxy/stars_yNeg.png",
+                     "textures/galaxy/stars_zPos1.jpg",
+                     "textures/galaxy/stars_zPos1.jpg",
+                     "textures/galaxy/stars_zPos1.jpg",
+                     "textures/galaxy/stars_zPos1.jpg",
+                     "textures/galaxy/stars_zPos1.jpg",
+                     "textures/galaxy/stars_zPos1.jpg",
+                     #"textures/galaxy/stars_zNeg.png"
+                     ]
+    else:
+        filenames = ["textures/galaxy/skybox_right1.png",
+                     "textures/galaxy/skybox_left2.png",
+                     "textures/galaxy/skybox_top3.png",
+                     "textures/galaxy/skybox_bottom4.png",
+                     "textures/galaxy/skybox_front5.png",
+                     "textures/galaxy/skybox_back6.png"
+                     ]
+    skybox = Skybox(filenames=filenames,
                     program=program)
 
     return skybox

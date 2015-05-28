@@ -45,7 +45,6 @@ class Shader():
     def initializeUniforms(self, *names):
         self.glUniforms = dict([(name, glGetUniformLocation(self.pointer, name))
             for name in names])
-        print self.glUniforms
 
     def initializeAttribs(self, *names):
         self.glAttribs = dict([(name, glGetAttribLocation(self.pointer, name))

@@ -111,15 +111,18 @@ class Asteroids(GameObject):
 	angle = (i/float(self.amount))*360
 	displacement = (random() * (2 * self.offset)) - self.offset
 	x = sin(angle) * self.radius + displacement
+        rx = mat4.from_x_rotation(displacement, dtype='f')
 	displacement = (random() * (2 * self.offset)) - self.offset
 	y = displacement * 0.2
+        ry = mat4.from_y_rotation(displacement, dtype='f')
 	displacement = (random() * (2 * self.offset)) - self.offset
 	z = cos(angle) * self.radius + displacement
+        rz = mat4.from_z_rotation(displacement, dtype='f')
 	translation = mat4.from_translation(vec3([x,y,z]), dtype='f')
 	#scale between 0.05 and 0.25
-        scaleFactor = random() * 50 / 100.0 + 0.05
+        scaleFactor = random() * 2000 / 100.0 + 0.05
         scale = mat4.from_scale(vec3([scaleFactor, scaleFactor, scaleFactor]), dtype='f')
 	#add random rotation around x
-        rotation = mat4.from_x_rotation(self.rot, dtype='f')
+        rotation = rx * ry * rz
 	#add to list of matrices
         self.modelMatrices[i] = scale * rotation * translation

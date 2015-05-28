@@ -42,9 +42,7 @@ def loadCubeMap(program, filenames):
 
     glUseProgram(program.pointer)
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture)
-    print filenames
     for i, filename in enumerate(filenames):
-        print filename
         img = Image.open(filename)
         imgData = np.array(list(img.getdata()), np.int8)
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB,

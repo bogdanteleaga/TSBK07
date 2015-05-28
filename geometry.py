@@ -25,7 +25,7 @@ def createSphereCoords(radius):
             z = sinPhi * sinTheta
 
             u = phi / (2 * math.pi)
-            v = theta / math.pi
+            v = 1 - theta / math.pi
 
             normals.append(x)
             normals.append(y)
