@@ -35,6 +35,7 @@ class Planet(GameObject):
         self._initModel()
 
     def _setRandomStartingPoint(self):
+        # Using angle will place the planets on different planes
         #angle = random.randint(0, 360)
         x = self.distance * math.cos(0)
         y = self.distance * math.sin(0)
@@ -100,12 +101,14 @@ class Sun(GameObject):
         self.rot += sec_per_frame / (self.spin * SEC_PER_DAY) 
 
     def getModelMatrix(self):
-        # TODO: re-enable spin once it shows up
         rot = mat4.from_y_rotation(self.rot, dtype='f')
         trans = mat4.from_translation(self.position, dtype='f')
         return rot * trans
 
 class Cube(GameObject):
+    """
+    Used for testing purposes only.
+    """
 
     def __init__(self, name=None, position=None, texImg=None, specTexImg=None, radius=None,
                        mass=None, spin=None, shininess=None, ka=None, kd=None,
@@ -183,37 +186,3 @@ class Cube(GameObject):
 
     def getModelMatrix(self):
         return mat4.identity(dtype='f')
-
-"""
-Maybe do a map for every attribute and the name that it has in the shader. Making it the same would be easier though.
-
-Mesh is done
-Drawing is semi-done:
-    - need to handle textures
-    - need to handle shininess and kd,ke,etc stuff
-
-Need to think about light in the scene(probably will just be one)
-
-Implement update method for physics.
-
-Then:
-    - Instantiate sun
-    - Instantiate planets with proper data
-    - Everything is in a gameobj list
-    - Iterate through list and call update and draw
-    - Everything works?
-
-- Should be able to take out draw in the other class, since it should work for everything
-- Buffers should also be in some sort of geometry location, we only use vbos here
-- The update method is probably the only thing that differentiates the planet from everything else (that is the model matrix)
-
-- For the ship:
-    - It should still have everything we give need in draw. So it should implement an update method and a proper initVBOs method(initVBOS should probably take some sort of geometry but this is not completely clear at this point)
-
-
-Still left besides whats above:
-g    - Camera. There is a prototype in that guys tutorial that follows exactly what I did in C
-half    - Projection. I guess it is not that important. Both camera and projection probably belong to a scene.
-g    - Handle mouse events somehow
-
-"""

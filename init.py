@@ -10,12 +10,18 @@ def initObjects(classicProgram, normalMapProgram, skyboxProgram, asteroidProgram
     print 'loading spaceship'
     spaceship = initSpaceship(classicProgram)
     print 'loading skybox'
-    skybox = initSkybox(skyboxProgram, highDef=False)
+    skybox = initSkybox(skyboxProgram, nebula=False)
     print 'loading belt'
     belt = initBelt(asteroidProgram)
     return planets, spaceship, skybox, belt
 
 def initBelt(program):
+    """
+    Initializes an asteroid belt.
+    The radius and offset are kind of set in stone to maintain a proper
+    position in the solar system.
+    The amount can be changed to render a bigger number of asteroids.
+    """
     belt = Asteroids(filename='objects/ida.obj',
 			  texImg='textures/ida.jpg',
                           shininess=30,
@@ -29,20 +35,23 @@ def initBelt(program):
                           )
     return belt
   
-def initSkybox(program, highDef=False):
-    if not highDef:
+def initSkybox(program, nebula=False):
+    """
+    There are two different textures available for the skybox. The first one is
+    a starry sky and uses the same picture in all 6 sides of the cube. The
+    second one looks like a nebula.
+    A third texture named bigstar.png(4K) is available in the textures folder but
+    is not used here since the loading times are disastrous and it doesn't look
+    much better.
+    """
+    if not nebula:
         # The other sides look pretty bad so we just duplicate this one
-        filenames = [#"textures/galaxy/stars_xPos.png",
-                     #"textures/galaxy/stars_xNeg.png",
-                     #"textures/galaxy/stars_yPos.png",
-                     #"textures/galaxy/stars_yNeg.png",
-                     "textures/galaxy/stars_zPos1.jpg",
-                     "textures/galaxy/stars_zPos1.jpg",
-                     "textures/galaxy/stars_zPos1.jpg",
-                     "textures/galaxy/stars_zPos1.jpg",
-                     "textures/galaxy/stars_zPos1.jpg",
-                     "textures/galaxy/stars_zPos1.jpg",
-                     #"textures/galaxy/stars_zNeg.png"
+        filenames = ["textures/galaxy/stars.jpg",
+                     "textures/galaxy/stars.jpg",
+                     "textures/galaxy/stars.jpg",
+                     "textures/galaxy/stars.jpg",
+                     "textures/galaxy/stars.jpg",
+                     "textures/galaxy/stars.jpg",
                      ]
     else:
         filenames = ["textures/galaxy/skybox_right1.png",
@@ -69,6 +78,14 @@ def initSpaceship(program):
     return spaceship
 
 def initPlanets(classicProgram, normalMapProgram, highDef=None):
+    """
+    Planets use real data and such any modification to radius, mass, distance
+    and velocity should be done with care.
+
+    There's two sets of textures for some planets as well as normal maps
+    available for an even smaller number. highDef will enable both the normal
+    map and higher resolution textures.
+    """
     p = normalMapProgram if highDef else classicProgram
     sun = Sun(name="Sun",
               position=vec3([0, 0, 0]),

@@ -39,9 +39,6 @@ class GameObject:
         if self.normalTex:
             activateTexture(self.normalTex, GL_TEXTURE1, self.program,
             "normalTex", 1)
-        # Will probably drop specular map?
-        if self.specTex:
-            activateTexture(self.specTex, GL_TEXTURE1, self.program)
 
     def _sendLightningParameters(self):
         glUniform1f(self.program.glUniforms["ka"], self.ka)

@@ -43,10 +43,18 @@ class Shader():
         self.pointer = self._createProgram(vs, fs)
 
     def initializeUniforms(self, *names):
+        """
+        This function can be called to initialize uniforms and store them in a
+        map so we don't have to call glGetUniformLocation every frame.
+        """
         self.glUniforms = dict([(name, glGetUniformLocation(self.pointer, name))
             for name in names])
 
     def initializeAttribs(self, *names):
+        """
+        This function can be called to initialize attribs and store them in a
+        map so we don't have to call glGetAttribLocation every frame.
+        """
         self.glAttribs = dict([(name, glGetAttribLocation(self.pointer, name))
             for name in names])
 

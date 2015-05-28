@@ -1,15 +1,9 @@
 from OpenGL.GL import *
 from OpenGL.arrays import vbo
 import numpy as np
-from pyrr import Vector3 as vec3
-from pyrr import Matrix44 as mat4
-from buffers import initializeVAO
-from gameobject import GameObject
+from geometry import createCubeVertices
 from objloader import loadObj
-from pyrr import euler as euler
 from texture import loadCubeMap, activateTexture
-import random
-import math
 
 
 class Skybox():
@@ -23,49 +17,7 @@ class Skybox():
         self.texture = loadCubeMap(self.program, filenames)
 
     def _initModel(self):
-        skyboxVertices = [
-            -1.0,  1.0, -1.0,
-            -1.0, -1.0, -1.0,
-             1.0, -1.0, -1.0,
-             1.0, -1.0, -1.0,
-             1.0,  1.0, -1.0,
-            -1.0,  1.0, -1.0,
-      
-            -1.0, -1.0,  1.0,
-            -1.0, -1.0, -1.0,
-            -1.0,  1.0, -1.0,
-            -1.0,  1.0, -1.0,
-            -1.0,  1.0,  1.0,
-            -1.0, -1.0,  1.0,
-      
-             1.0, -1.0, -1.0,
-             1.0, -1.0,  1.0,
-             1.0,  1.0,  1.0,
-             1.0,  1.0,  1.0,
-             1.0,  1.0, -1.0,
-             1.0, -1.0, -1.0,
-       
-            -1.0, -1.0,  1.0,
-            -1.0,  1.0,  1.0,
-             1.0,  1.0,  1.0,
-             1.0,  1.0,  1.0,
-             1.0, -1.0,  1.0,
-            -1.0, -1.0,  1.0,
-      
-            -1.0,  1.0, -1.0,
-             1.0,  1.0, -1.0,
-             1.0,  1.0,  1.0,
-             1.0,  1.0,  1.0,
-            -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0,
-      
-            -1.0, -1.0, -1.0,
-            -1.0, -1.0,  1.0,
-             1.0, -1.0, -1.0,
-             1.0, -1.0, -1.0,
-            -1.0, -1.0,  1.0,
-             1.0, -1.0,  1.0
-        ]
+        skyboxVertices = createCubeVertices()
         
         self.vao = glGenVertexArrays(1)
         glUseProgram(self.program.pointer)

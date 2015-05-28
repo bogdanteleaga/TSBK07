@@ -12,6 +12,11 @@ speed = 0.166
 mouseSpeed = 0.00008
 
 def getNewViewMatrixAndEye(window, animation_speed, dt, position, width=1920.0, height=1080.0):
+    """
+    Kind of global function. 
+    Mainly handles camera which behaves as an FPS camera.
+    Additionally it had some input handling added to it(see animation_speed).
+    """
     global horizontalAngle, verticalAngle
     global oldx, oldy, first
 
@@ -81,6 +86,10 @@ def getNewViewMatrixAndEye(window, animation_speed, dt, position, width=1920.0, 
 
 
 def lookAt(eye, target, up):
+    """
+    Custom lookAt matrix implementation.
+    Will be contributed back to pyrr and should be removed from here.
+    """
     forward = (target - eye).normalised
     side = (forward ^ up).normalised
     up = (side ^ forward).normalised

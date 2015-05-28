@@ -5,7 +5,6 @@ from pyrr import Matrix44 as mat4
 from buffers import initializeVAO
 from gameobject import GameObject
 from objloader import loadObj
-from pyrr import euler as euler
 import random
 import math
 
@@ -35,14 +34,6 @@ class Spaceship(GameObject):
   def drawCall(self):
       glDrawArrays(GL_TRIANGLES, 0, self.count)
 			   
-  def difference(self, name, new):
-      if self.variables[name] is True:
-        self.variables[name] = new
-        return 0
-      diff = new - self.variables[name]
-      self.variables[name] = new
-      return diff;
-    
   def getzRot(self, diff):
       if diff > 0:
         self.zRotAngle -= 0.05
@@ -64,12 +55,12 @@ class Spaceship(GameObject):
   def getxRot(self, diff):
       if diff > 0:
         self.xRotAngle -= 0.05
-        if self.xRotAngle <= -0.6:
-	  self.xRotAngle = -0.6
+        if self.xRotAngle <= -1:
+	  self.xRotAngle = -1
       if diff < 0:
 	self.xRotAngle += 0.05
-	if self.xRotAngle >= 0.6:
-	  self.xRotAngle = 0.6
+        if self.xRotAngle >= 1:
+	  self.xRotAngle = 1
       if diff == 0:
 	if self.xRotAngle > 0.1:
 	  self.xRotAngle -= 0.09
@@ -81,28 +72,20 @@ class Spaceship(GameObject):
     
   def getModelMatrix(self):
       scale = mat4.from_scale([0.2, 0.2, 0.2])
-      #zdiff = self.hAngle - self.oldhAngle
-      #zAngle = self.getRot(zdiff)
-      
-      #e = euler.create(zAngle,self.hAngle,self.vAngle)
-      #e = euler.create(self.vAngle,self.hAngle,zAngle)
-      #rot = mat4.from_eulers(e,dtype='f')
-      
-      vdiff = self.vAngle - self.oldvAngle
       
       roty = mat4.from_y_rotation(-self.hAngle)
-      rotx = mat4.from_x_rotation(self.vAngle)
+
+      vdiff = self.vAngle - self.oldvAngle
       rotx = mat4.from_x_rotation(self.getxRot(vdiff))
       
       zdiff = self.hAngle - self.oldhAngle
-      
       rotz = mat4.from_z_rotation(-self.getzRot(zdiff))
+
       trans = mat4.from_translation(self.position, dtype='f')
       self.oldhAngle = self.hAngle
       self.oldvAngle = self.vAngle
       
-      return scale * rotz * rotx* roty * trans
-      #return scale * rot * trans
+      return scale * rotz * rotx * roty * trans
     
   def update(self, eye, direction, right, up, hAngle, vAngle):
       self.vAngle = vAngle

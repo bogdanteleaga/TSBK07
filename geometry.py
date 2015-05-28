@@ -3,6 +3,10 @@ from pyrr import Vector3 as vec3
 
 
 def createSphereCoords(radius):
+    """
+    Generates lists of vertices, normal and texture coordinates as well as
+    indices that can be used as a sphere.
+    """
     latBands = 30
     longBands = 30
 
@@ -24,8 +28,8 @@ def createSphereCoords(radius):
             y = cosTheta
             z = sinPhi * sinTheta
 
-            u = phi / (2 * math.pi)
-            v = 1 - theta / math.pi
+            u = 1 - phi / (2 * math.pi)
+            v = theta / math.pi
 
             normals.append(x)
             normals.append(y)
@@ -57,9 +61,57 @@ def createSphereCoords(radius):
 
     return vertexPos, normals, textureCoords, indexData
 
+def createCubeVertices():
+    return [
+            -1.0,  1.0, -1.0,
+            -1.0, -1.0, -1.0,
+             1.0, -1.0, -1.0,
+             1.0, -1.0, -1.0,
+             1.0,  1.0, -1.0,
+            -1.0,  1.0, -1.0,
+      
+            -1.0, -1.0,  1.0,
+            -1.0, -1.0, -1.0,
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0,  1.0,
+            -1.0, -1.0,  1.0,
+      
+             1.0, -1.0, -1.0,
+             1.0, -1.0,  1.0,
+             1.0,  1.0,  1.0,
+             1.0,  1.0,  1.0,
+             1.0,  1.0, -1.0,
+             1.0, -1.0, -1.0,
+       
+            -1.0, -1.0,  1.0,
+            -1.0,  1.0,  1.0,
+             1.0,  1.0,  1.0,
+             1.0,  1.0,  1.0,
+             1.0, -1.0,  1.0,
+            -1.0, -1.0,  1.0,
+      
+            -1.0,  1.0, -1.0,
+             1.0,  1.0, -1.0,
+             1.0,  1.0,  1.0,
+             1.0,  1.0,  1.0,
+            -1.0,  1.0,  1.0,
+            -1.0,  1.0, -1.0,
+      
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+             1.0, -1.0, -1.0,
+             1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+             1.0, -1.0,  1.0
+    ]
 
 
 def generateTangents(vertexPos, textureCoords, indexData):
+    """
+    Generate tangents for normal mapping.
+    Currently only works with indexData.
+    """
     tangents = [0 for i in vertexPos]
     # For each triangle
     for i in range(0, len(indexData), 3):

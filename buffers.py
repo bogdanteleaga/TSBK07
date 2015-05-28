@@ -7,6 +7,12 @@ import numpy as np
 
 def initializeVAO(program, vertexPos, normals, textureCoords, indexData=None,
                   tangents=None):
+    """
+    Initialize VAO with some basic elements. Vertices, normals and texture
+    coordinates are necessary.
+    IndexData is optional. 
+    Tangents can be optionally generated if it is requested.
+    """
     glUseProgram(program.pointer)
     names = ["inPos", "inNormal", "inTex"]
     posLoc, normalLoc, texLoc = [program.glAttribs[name]

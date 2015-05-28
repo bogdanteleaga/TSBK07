@@ -1,3 +1,8 @@
+"""
+Old main file used for testing purposes.
+Kept here for legacy sake and for testing if all libraries work on a new
+machine. Should render a cube somewhere.
+"""
 import sys
 import cyglfw3 as glfw
 from OpenGL.GL import *

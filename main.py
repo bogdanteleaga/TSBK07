@@ -38,7 +38,7 @@ def initWindow():
 
 
 def initCamera():
-    eye = vec3([5, 5, 5], dtype='f')
+    eye = vec3([200, 200, 200], dtype='f')
     target = vec3([0, 0, 0], dtype='f')
     up = vec3([0, 1, 0], dtype='f')
 
