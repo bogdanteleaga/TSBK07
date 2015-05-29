@@ -33,12 +33,12 @@ Push changes to Github:
 - git push origin master
 
 To run it:
-- cd <project-folder>
-- source <env-name>/bin/activate
+- cd < project-folder >
+- source < env-name >/bin/activate
 - MESA_GL_VERSION_OVERRIDE=3.3 MESA_GLSL_VERSION_OVERRIDE=330 python main.py
 
 First time you need to add:
-- cd <project-folder>
-- virtualenv <env-name>
+- cd < project-folder >
+- virtualenv < env-name >
 - source <env-name>/bin/activate
 - pip install -r requirements.txt
